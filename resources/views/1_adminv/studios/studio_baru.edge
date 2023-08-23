@@ -1,0 +1,141 @@
+@layout('1_adminv/layout')
+
+@set('judul', 'Admin: Studio Baru')
+
+@section('body')
+<div class="space-y-8 p-4">
+  <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+    <div class="flex-1 space-y-4">
+      {{-- kotak film --}}
+      <div class="text-xl font-semibold pb-2">Jadwal Baru</div>
+
+      <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Velit ut
+        mollitia porro sequi libero ipsam accusamus aliquam, sed,
+        ducimus dolores expedita necessitatibus blanditiis repellat
+        nihil totam sunt nisi. Blanditiis, consectetur.
+      </div>
+    </div>
+
+    <div class="flex-none lg:w-1/3 space-y-3 rounded p-4">
+      
+    </div>
+  </div>
+
+  <div id="mainForm" class="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-8">
+    <div class="flex-1 border border-gray-300 rounded p-4">
+      <div class="mb-8 font-semibold text-lg">
+        Formulir Jadwal Baru
+      </div>
+      <form action="">
+        <div class="space-y-4">
+          <div class="">
+            <select id="iTier" class="max-w-md" data-te-select-init data-te-select-placeholder="Pilih salah satu"
+              data-te-select-filter="true">
+  
+              @if(tiers.length > 0)
+              @each(item in tiers)
+              <option value="{{ item.id }}">{{ capitalCase(item.tier) }}</option>
+              @endeach
+              @else
+              <option disabled>Tidak ada tier</option>
+              @endif
+            </select>
+            <label data-te-select-label-ref for="iTier">Pilih tier studio</label>
+          </div>
+
+          <div class="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-4">
+            <div id="iWaktuTayang-value" class="flex-1 relative" data-te-input-wrapper-init>
+              <input type="text"
+                class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                data-te-timepicker-format24="true" id="iWaktuTayang" />
+              <label for="iWaktuTayang"
+                class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Pilih
+                waktu tayang</label>
+            </div>
+
+            <div class="flex-1 relative" data-te-input-wrapper-init>
+              <input type="number"
+                class="peer block min-h-[auto] w-full rounded border-0 bg-neutral-100 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                id="iInterlude" value="30" readonly />
+              <label for="iInterlude"
+                class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Waktu
+                Interlude (menit)
+              </label>
+            </div>
+          </div>
+
+          <div class="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-4">
+            <div class="flex-1 relative" data-te-input-wrapper-init>
+              <input type="text"
+                class="peer block min-h-[auto] w-full rounded border-0 bg-neutral-100 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                id="iSelesaiFilm" value="30" readonly />
+              <label for="iSelesaiFilm"
+                class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Selesai
+                Tayang
+              </label>
+            </div>
+            <div class="flex-1 relative" data-te-input-wrapper-init>
+              <input type="text"
+                class="peer block min-h-[auto] w-full rounded border-0 bg-neutral-100 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:bg-neutral-700 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                id="iSelesaiInterlude" value="30" readonly />
+              <label for="iSelesaiInterlude"
+                class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Selesai
+                Interlude
+              </label>
+            </div>
+          </div>
+
+          <div id="wadahKeteranganError" class="hidden mt-4 p-4 bg-red-400 text-red-600 text-sm">
+            Wtf brooo, lu bikin apaan
+          </div>
+
+          <button id="btKirim" type="button"
+            class="px-4 py-2 bg-yellow-300 cursor-pointer rounded items-center text-center hover:bg-yellow-400">Buat
+            Jadwal Baru</button>
+        </div>
+      </form>
+    </div>
+    <div class="flex-none border border-gray-300 lg:w-1/2 p-4">
+      <div class="mb-8 font-semibold text-lg">
+        Pratinjau
+      </div>
+      <div id="wadahJadwalAktif" class="space-y-6">
+        <div data-film="0" class="jadwal-film p-2 text-sm bg-gray-100 flex space-x-6">
+          <div class="flex-1">
+            <a href="#" class="font-semibold hover:underline cursor-pointer">Nama Film</a>
+
+            <div>
+              <div class="flex space-x-2 max-w-xs">
+                <div class="flex-none flex w-32">
+                  <span class="flex-1">Selesai tayang</span>
+                  <span class="flex-none">:</span>
+                </div>
+                <div class="flex-1">Testing</div>
+              </div>
+
+              <div class="flex space-x-2 max-w-xs">
+                <div class="flex-none flex w-32">
+                  <span class="flex-1">Selesai interlude</span>
+                  <span class="flex-none">:</span>
+                </div>
+                <div class="flex-1">Testing</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-none flex items-center justify-center">
+            <div class="p-1 text-white bg-slate-900">
+              20:20
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
+
+@section('script')
+<script src="{{asset('assets/studio_baru.js')}}"></script>
+@endsection

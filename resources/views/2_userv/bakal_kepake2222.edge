@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @entryPointStyles('app')
+
+    <title>Pilih Kursi</title>
+</head>
+<body>
+    {{--  navbar  --}}
+    <div class="px-5 py-4 bg-cyan-500 flex mb-8">
+        <div class="text-2xl font-bold flex-1">Bioskop Anjay K1</div>
+        <div class="flex space-x-4">
+            <div class="px-2 py-1 cursor-pointer rounded hover:text-white hover:bg-slate-800">Pilih Kursi</div>
+            <div class="px-2 py-1 cursor-pointer rounded hover:text-white hover:bg-slate-800">Ganti Grid</div>
+        </div>
+    </div>
+
+    {{--  body  --}}
+    <div class="container mx-auto px-4">
+        <div class="space-y-6 p-4">
+            <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+                <div class="flex-1 space-y-4">
+                    {{--  kotak film  --}}
+                    <div class="text-xl font-semibold pb-2" id="tes">Judul Film Disini</div>
+
+                    <div class="text-lg font-semibold inline-flex items-center justify-center">
+                        <svg fill="none" class="h-5 w-5 md:mr-2" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>18:00</span>
+                    </div>
+
+                    <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Velit ut 
+                        mollitia porro sequi libero ipsam accusamus aliquam, sed, 
+                        ducimus dolores expedita necessitatibus blanditiis repellat 
+                        nihil totam sunt nisi. Blanditiis, consectetur.
+                    </div>
+                    <div class="flex space-x-2">
+                        <div class="p-2 border border-gray-500">12 Menit</div>
+                        <div class="p-2 border border-gray-500">PG: 15+</div>
+                        <div class="p-2 border border-gray-500">Genre: Horror</div>
+                    </div>
+                </div>
+
+                <div class="flex-none lg:w-1/3 space-y-3 border border-gray-300 rounded p-4">
+                    <div class="text-lg">Data Tiket Kau Disini</div>
+                    
+                    <div class="relative w-full overflow-y-auto">
+                        <div id="wadahTiketKosong" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex-col items-center opacity-100">
+                            <span class="">Tidak ada kursi terpilih.</span>
+                        </div>
+
+                        {{--  kursi disini  --}}
+                        <ul class="wadahTiket space-y-4">
+                            <li class="w-full flex flex-row">
+                                <div class="flex-1 bg-gray-100 space-y-1 p-4">
+                                    <div class="font-semibold text-md mb-2">Judul Film</div>
+                                    <div class="flex text-xs flex-row space-x-1">
+                                        <div class="p-0.5 bg-slate-800 text-white">Rating: PG15</div>
+                                        <div class="p-0.5 bg-slate-800 text-white">Durasi: 120 m</div>
+                                        <div class="p-0.5 bg-slate-800 text-white">Genre: Drama</div>
+                                    </div>
+                                    <div class="text-sm ">18 Nov 22 22.00</div>
+                                    <div class="text-md">Rp. 10.000</div>
+                                </div>
+                                <div class="flex-none w-1/4">
+                                    <div class="w-full h-full flex items-center justify-center bg-slate-600">
+                                        <div class="text-white">Foto</div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="w-full flex flex-row">
+                                <div class="flex-1 bg-gray-100 space-y-1 p-4">
+                                    <div class="font-semibold text-md mb-2">Judul Film</div>
+                                    <div class="flex text-xs flex-row space-x-1">
+                                        <div class="p-0.5 bg-slate-800 text-white">Rating: PG15</div>
+                                        <div class="p-0.5 bg-slate-800 text-white">Durasi: 120 m</div>
+                                        <div class="p-0.5 bg-slate-800 text-white">Genre: Drama</div>
+                                    </div>
+                                    <div class="text-sm ">18 Nov 22 22.00</div>
+                                    <div class="text-md">Rp. 10.000</div>
+                                </div>
+                                <div class="flex-none w-1/4">
+                                    <div class="w-full h-full flex items-center justify-center bg-slate-600">
+                                        <div class="text-white">Foto</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {{--  totalan  --}}
+                    <div class="flex text-lg font-semibold">
+                        <div class="flex-1">Total</div>
+                        <div class="flex-none">Rp. 10.000</div>
+                    </div>
+
+                    <div>
+                        <div id="kirimGrid" class="px-2 py-1 bg-yellow-300 cursor-pointer rounded items-center text-center hover:bg-yellow-400">Lanjut Pembayaran</div>
+                    </div>
+                </div>
+            </div>
+
+            {{--  {{ inspect(grid) }}  --}}
+
+            <div class="flex overflow-x-scroll items-center justify-center bg-gray-100 p-6">
+                {{--  <div class=" flex-1 grid grid-cols-12 gap-1 md:gap-2 content-center">
+                    <div class="kursi">{{ item.id }}</div>
+                </div>  --}}
+                <div class="flex flex-col space-y-1">
+                    @each(col in grid)
+                      <div class="flex space-x-1">
+
+                        @each(item in col)
+                            @if(item.isKursi)
+                                <div class="kursi-cgv-template" data-id="{{ item.id }}" data-berubah="0" data-iskursi="{{ item.isKursi }}">{{ item.node }}</div>
+                            @else
+                                <div class="bukan-kursi"></div>
+                            @endif
+                        @endeach
+
+                      </div>
+                    @endeach
+
+
+                    
+                </div>
+                {{--  <div class="flex-none lg:w-1/3 space-y-3">
+                    <div class="text-lg">1 Kursi Terpilih</div>
+                    <div>
+                        <div class="font-bold">A2</div>
+                        <div class="">Rp. 10.000</div>
+                    </div>
+                    <div>
+                        <div class="px-2 py-1 bg-yellow-300 cursor-pointer rounded items-center text-center hover:bg-yellow-400">Pesan Kursi</div>
+                    </div>
+                </div>  --}}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{asset('assets/reservasi_kursi.js')}}"></script>
+</body>
+</html>

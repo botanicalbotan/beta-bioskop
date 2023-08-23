@@ -1,0 +1,15 @@
+{
+  "assets/app.css": "http://localhost:8080/assets/app.css",
+  "assets/app.js": "http://localhost:8080/assets/app.js",
+  "assets/bioskop.js": "http://localhost:8080/assets/bioskop.js",
+  "assets/u_home.js": "http://localhost:8080/assets/u_home.js",
+  "assets/u_reservasi_kursi.js": "http://localhost:8080/assets/u_reservasi_kursi.js",
+  "assets/list_film.js": "http://localhost:8080/assets/list_film.js",
+  "assets/list_jadwal.js": "http://localhost:8080/assets/list_jadwal.js",
+  "assets/jadwal_baru.js": "http://localhost:8080/assets/jadwal_baru.js",
+  "assets/studio_baru.js": "http://localhost:8080/assets/studio_baru.js",
+  "assets/update_layout.js": "http://localhost:8080/assets/update_layout.js",
+  "assets/list_studio.js": "http://localhost:8080/assets/list_studio.js",
+  "assets/vendors-node_modules_tw-elements_dist_js_chart_es_js.js": "http://localhost:8080/assets/vendors-node_modules_tw-elements_dist_js_chart_es_js.js",
+  "assets/vendors-node_modules_tw-elements_dist_js_chartjs-plugin-datalabels_es_js.js": "http://localhost:8080/assets/vendors-node_modules_tw-elements_dist_js_chartjs-plugin-datalabels_es_js.js"
+}

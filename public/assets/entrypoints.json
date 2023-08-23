@@ -1,0 +1,57 @@
+{
+  "entrypoints": {
+    "app": {
+      "css": [
+        "http://localhost:8080/assets/app.css"
+      ],
+      "js": [
+        "http://localhost:8080/assets/app.js"
+      ]
+    },
+    "bioskop": {
+      "js": [
+        "http://localhost:8080/assets/bioskop.js"
+      ]
+    },
+    "u_home": {
+      "js": [
+        "http://localhost:8080/assets/u_home.js"
+      ]
+    },
+    "u_reservasi_kursi": {
+      "js": [
+        "http://localhost:8080/assets/u_reservasi_kursi.js"
+      ]
+    },
+    "list_film": {
+      "js": [
+        "http://localhost:8080/assets/list_film.js"
+      ]
+    },
+    "list_jadwal": {
+      "js": [
+        "http://localhost:8080/assets/list_jadwal.js"
+      ]
+    },
+    "jadwal_baru": {
+      "js": [
+        "http://localhost:8080/assets/jadwal_baru.js"
+      ]
+    },
+    "studio_baru": {
+      "js": [
+        "http://localhost:8080/assets/studio_baru.js"
+      ]
+    },
+    "update_layout": {
+      "js": [
+        "http://localhost:8080/assets/update_layout.js"
+      ]
+    },
+    "list_studio": {
+      "js": [
+        "http://localhost:8080/assets/list_studio.js"
+      ]
+    }
+  }
+}

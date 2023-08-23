@@ -1,0 +1,178 @@
+@layout('2_userv/layout')
+
+@set('judul', 'User: Home')
+
+@section('body')
+<div class="space-y-8 p-4">
+  <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+    <div class="flex-1 space-y-4">
+      {{-- kotak film --}}
+      <div class="text-xl font-semibold pb-2" id="tes">Home, Tp Juga Pilih Jadwal</div>
+
+      <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Velit ut
+        mollitia porro sequi libero ipsam accusamus aliquam, sed,
+        ducimus dolores expedita necessitatibus blanditiis repellat
+        nihil totam sunt nisi. Blanditiis, consectetur.
+      </div>
+
+      <div>Jadwal aktif ini cuma jadwal yang tayang dari hari ini, ke 7 hari kedepan, biar gw ga kebanyakan nampilinnya.
+      </div>
+    </div>
+
+    <div class="flex-none lg:w-1/3 space-y-3 border border-gray-300 rounded p-4">
+      <div class="text-lg">Filter Studio Sementara!</div>
+      <div>
+        Lumayan jadi, walo ga bagus2 banget. Secara input, udah rada ngeh apa aja yang perlu dilakuin.
+      </div>
+      <div class="">
+        <select id="iStudio" data-current-studio="{{ currentStudio.id }}" data-current-tanggal="{{ currentTanggal.toFormat('yyyy-MM-dd') }}" class="max-w-md" data-te-select-init data-te-select-placeholder="Pilih salah satu"
+          data-te-select-filter="true">
+
+          @if(studios.length > 0)
+          @each(item in studios)
+          <option selected="{{ (item.id == currentStudio.id)? 'true': 'false' }}" value="{{ item.id }}">{{ item.nama }}</option>
+          @endeach
+          @else
+          <option disabled>Tidak ada studio</option>
+          @endif
+        </select>
+        <label data-te-select-label-ref for="iStudio">Pilih studio</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-x-1">
+    <span>JADWAL STUDIO:</span>
+    <span class=" font-bold">{{ currentStudio.nama }}</span>
+  </div>
+
+
+  <div class="grid grid-flow-col gap-4">
+    @if(tanggalAvail.length > 0)
+    @each(tang in tanggalAvail)
+    @if(tang.isTarget)
+    <a href="/userv/jadwals/{{ currentStudio.id }}/{{ tang.tgl.toFormat('yyyy-MM-dd') }}" class="p-1 space-x-4 flex flex-row items-center bg-primary-500 text-white">
+      <div class="w-1/3 font-semibold text-xl flex justify-end">
+        <span>{{ tang.tgl.day }}</span>
+      </div>
+      <div class="flex-1 flex flex-col text-xs">
+        <div>{{ tang.tgl.toFormat('cccc') }}</div>
+        <div>{{ tang.tgl.toFormat('LLL') }}</div>
+      </div>
+    </a>
+    @else
+    <a href="/userv/jadwals/{{ currentStudio.id }}/{{ tang.tgl.toFormat('yyyy-MM-dd') }}" class="p-1 space-x-4 flex flex-row items-center">
+      <div class="w-1/3 font-semibold text-xl flex justify-end">
+        <span>{{ tang.tgl.day }}</span>
+      </div>
+      <div class="flex-1 flex flex-col text-xs">
+        <div>{{ tang.tgl.toFormat('cccc') }}</div>
+        <div>{{ tang.tgl.toFormat('LLL') }}</div>
+      </div>
+    </a>
+    @endif
+    @endeach
+    @else
+
+    @endif
+  </div>
+
+  <div class="space-y-4">
+    @if(filmMaJadwals.length > 0)
+    @each(film in filmMaJadwals)
+
+    <div data-film="0" class="jadwal-film p-4 text-sm bg-gray-100 flex space-x-6">
+      <div class="flex-none flex items-center justify-center w-20 h-28 p-2 bg-slate-500">
+        <div class="">
+          Foto
+        </div>
+      </div>
+
+      <div class="flex-1">
+        <div class=" text-lg font-semibold">{{ film.namaFilm }}</div>
+
+        <div class="mb-4 flex space-x-4">
+          <div class="flex items-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5"
+              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z">
+              </path>
+            </svg>
+            <span class="ml-1">{{ film.durasi }} menit</span>
+          </div>
+          <div class="flex items-center"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5"
+              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path stroke-linecap="round"
+                d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z">
+              </path>
+            </svg>
+            <span class="ml-1">{{ film.genre }}</span>
+          </div>
+          <div class="flex items-center"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5"
+              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z">
+              </path>
+            </svg>
+            <span class="ml-1">Rating {{ film.rating }}</span>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap space-x-2">
+          @if(film.jadwals.length > 0)
+            @each(item in film.jadwals)
+            @if(item.isPenuh)
+              <div class="px-3 py-2 text-black bg-gray-500 cursor-not-allowed">
+                {{ item.mulaiTayang }}
+              </div>
+            @else
+            <a href="/userv/reservasi/baru?jadid={{ item.id }}" class="px-3 py-2 text-white bg-slate-900">
+              {{ new Date(item.mulaiTayang).toLocaleTimeString('id-ID', { hour:'2-digit', minute: '2-digit'}) }}
+            </a>
+            @endif
+            @endeach
+          @else
+            <div>Jadwal kosong</div>
+          @endif
+        </div>
+
+
+      </div>
+
+    </div>
+
+    @endeach
+    @else
+
+    @endif
+
+  </div>
+
+  {{-- @if(studios && studios.length > 0)
+  <div class="grid grid-cols-2 lg:grid-cols-6 gap-2 md:gap-4">
+    @each(item in studios)
+    <div class="p-4 border border-gray-300 rounded-sm">
+      <div class=" bg-gray-50 h-20 flex items-center justify-center">
+        <svg class="w-10 h-10 text-lime-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z">
+          </path>
+        </svg>
+      </div>
+      <a href="{{ '/adminv/studios/' + item.id }}" class="font-semibold hover:underline">{{ item.nama }}</a>
+      <div class="opacity-70">{{ item.tier }}</div>
+    </div>
+
+    @endeach
+  </div>
+
+  @else
+  <div>Gaada studio bro, bikin dulu</div>
+  @endif --}}
+
+</div>
+@endsection
+
+@section('script')
+<script src="{{asset('assets/u_home.js')}}"></script>
+@endsection
