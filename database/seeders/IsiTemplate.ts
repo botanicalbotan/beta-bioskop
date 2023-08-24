@@ -5,17 +5,15 @@ import RatingSensor from 'App/Models/RatingSensor';
 import Studio from 'App/Models/Studio';
 import Template from 'App/Models/Template';
 import TierStudio from 'App/Models/TierStudio';
+import RawData from 'App/Asli/raw_data'
+import Database from '@ioc:Adonis/Lucid/Database';
+import { numToChar } from 'App/customFunction'
 
 // function getNextChar(char: string) {
 //   return String.fromCharCode(char.charCodeAt(0) + 1);
 // }
 
-function numToChar(angka: number = 0) {
-  let base = 'a'.charCodeAt(0)
-  return (angka === 0 || angka === 1)? 'a': String.fromCharCode(base + angka - 1)
-}
-
-async function bikinTier(){
+async function bikinTier() {
   let tier1 = await TierStudio.create({
     nama: 'reguler',
     deskripsi: 'bioskop tapi reguler',
@@ -99,8 +97,36 @@ async function bikinRatingSensor() {
   ])
 }
 
+async function bikinLayoutNode(stud: Studio) {
+  // ngambil semua template sesuai col row terpilih
+  // PENTING: max row ama col di template harus predefined dan fixed
+  // PENTING: col ama row di request harus lebih kecil dari max row col template
+  let templateTerpilih = await Database
+    .from('templates')
+    .select(
+      'id',
+      'node',
+      'row',
+      'col'
+    )
+    .where('row', '<=', stud.row)
+    .andWhere('col', '<=', stud.col)
+    .orderBy('col', 'asc')
+    .orderBy('row', 'asc')
+
+  for (const iterator of templateTerpilih) {
+    await stud.related('kursis').create({
+      templateId: iterator.id,
+      isKursi: false,
+      harga: 20000, // harga ini buat jaga2 aja, sekarang masih pake dari tier
+      privId: numToChar(Math.floor(Math.random() * 20)) + stud.id + '$' + iterator.node + '$' + numToChar(Math.floor(Math.random() * 20)) + numToChar(Math.floor(Math.random() * 20)),
+      pubId: iterator.node,
+    })
+  }
+}
+
 export default class extends BaseSeeder {
-  public async run () {
+  public async run() {
     // ----- bikin tier studio -----
     let tierDefault = await bikinTier()
 
@@ -110,34 +136,42 @@ export default class extends BaseSeeder {
     // ----- bikin rating sensor -----
     await bikinRatingSensor()
 
+    let maxCol = RawData.maxCol // tes pertama pake 5 dulu
+    // let maxCol = 20
+    let maxRow = RawData.maxRow // tes pertama pake 10 dulu
+    // let maxRow = 50
+
     // ----- bikin 1 studio dulu -----
     let stud = await Studio.create({
       nama: 'Jurug',
-      tierStudioId: tierDefault.id
+      tierStudioId: tierDefault.id,
+      // 2 data dibawah super penting, harus dibawah maxcol maxrow
+      row: 10,
+      col: 5
     })
 
-    let maxCol = 5 // tes pertama pake 5 dulu
-    // let maxCol = 20
-    let maxRow = 10 // tes pertama pake 10 dulu
-    // let maxRow = 50
-
-    for(let i=1; i<= maxCol; i++){
-      for(let j=1; j<= maxRow; j++){
-        let temp = await Template.create({
+    // sekarang ini murni buat bikin template doang
+    for (let i = 1; i <= maxCol; i++) {
+      for (let j = 1; j <= maxRow; j++) {
+        await Template.create({
           node: numToChar(i) + j,
           row: j,
           col: i
         })
 
-        await stud.related('kursis').create({
-          pubId: numToChar(i) + j,
-          privId: numToChar(Math.floor(Math.random()*20)) + stud.id + '$' + numToChar(i) + j + '$' + numToChar(Math.floor(Math.random()*20)) + numToChar(Math.floor(Math.random()*20)),
-          templateId: temp.id,
-          harga: 10000,
-          studioId: 1,
-        })
+        // await stud.related('kursis').create({
+        //   pubId: numToChar(i) + j,
+        //   privId: numToChar(Math.floor(Math.random() * 20)) + stud.id + '$' + numToChar(i) + j + '$' + numToChar(Math.floor(Math.random() * 20)) + numToChar(Math.floor(Math.random() * 20)),
+        //   templateId: temp.id,
+        //   harga: 10000,
+        //   studioId: 1,
+        // })
       }
     }
-    
+
+    // kalau udah kelar semua
+    // ----- generate layout node kursinya -----
+    await bikinLayoutNode(stud)
+
   }
 }

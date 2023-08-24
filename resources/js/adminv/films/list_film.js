@@ -7,33 +7,52 @@ import {
 
 initTE({ Datepicker, Input });
 
+import axios from "axios";
 
 
 let bikinFilmRandom = document.getElementById('bikinFilmRandom')
 bikinFilmRandom.addEventListener('click', () => {
     let namaFilm = prompt('Masukin nama film')
 
-    if (namaFilm == null || namaFilm == '') {
-
-    } else {
-        $.ajax({
-            type: "POST",
-            url: '/adminv/films/baru',
-            data: {
-                nama: namaFilm
-            },
-            dataType: "json",
-            success: function (response) {
-                alert('Berhasil bro!')
+    if(validasiInput(namaFilm)){
+        axios.post('/adminv/films/baru', {
+            nama: namaFilm
+        })
+        .then((res) => {
+            alert('Berhasil bro!')
                 console.log(response)
                 window.location.reload()
-            },
-            error: function (err) {
-                alert('Gagal bro, ada error')
-                console.log(err)
-            }
+        })
+        .catch((err) => {
+            alert('Gagal bro, ada error')
+            console.log(err.response)
+        })
 
-        });
+        // $.ajax({
+        //     type: "POST",
+        //     url: '/adminv/films/baru',
+        //     data: {
+        //         nama: namaFilm
+        //     },
+        //     dataType: "json",
+        //     success: function (response) {
+        //         alert('Berhasil bro!')
+        //         console.log(response)
+        //         window.location.reload()
+        //     },
+        //     error: function (err) {
+        //         alert('Gagal bro, ada error')
+        //         console.log(err)
+        //     }
+
+        // });
     }
 })
 
+let validasiInput = function (namaFilm) {
+    if(namaFilm == null || namaFilm == ''){
+        return false
+    }
+
+    return true
+}

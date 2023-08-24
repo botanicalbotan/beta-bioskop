@@ -1,6 +1,8 @@
 import { Select, initTE } from "tw-elements";
 initTE({ Select });
 
+import axios from "axios";
+
 import Swal from 'sweetalert2'
 
 const tierStud = document.getElementById('tierStud')
@@ -15,28 +17,44 @@ btBikinStudio.addEventListener('click', ()=>{
     let namaStudio = prompt('Masukin nama studio')
 
     // ini diganti sesuai max template
-    let col = prompt('Masukin lebar node col (1-5)')
-    let row = prompt('Masukin lebar node row (1-10)')
+    let col = prompt('Masukin lebar node col (1-10)')
+    let row = prompt('Masukin lebar node row (1-30)')
 
     if(validasiInput(namaStudio, col, row)){
-        $.ajax({
-            type: "POST",
-            url: '/adminv/studios/baru',
-            data: {
-                nama: namaStudio
-            },
-            dataType: "json",
-            success: function (response) {
-                alert('Berhasil bro!')
-                console.log(response)
-                window.location.reload()
-            },
-            error: function (err) {
-                alert('Gagal bro, ada error')
-                console.log(err)
-            }
-            
-        });
+
+        axios.post('/adminv/studios/baru', {
+            nama: namaStudio,
+            col,
+            row
+        })
+        .then((res) => {
+            alert('Berhasil bro!')
+            window.location.reload()
+        }).catch((err) => {
+            alert('Error: ' + err.responseJSON.err)
+            console.log(err)
+        })
+
+
+        // $.ajax({
+        //     type: "POST",
+        //     url: '/adminv/studios/baru',
+        //     data: {
+        //         nama: namaStudio,
+        //         col,
+        //         row
+        //     },
+        //     dataType: "json",
+        //     success: function (response) {
+        //         alert('Berhasil bro!')
+        //         window.location.reload()
+        //     },
+        //     error: function (err) {
+        //         alert('Error: ' + err.responseJSON.err)
+        //         console.log(err)
+        //     } 
+        // });
+
     } else {
         alert('Waduh, input lu ga valid bro')
     }

@@ -11,6 +11,12 @@ export default class Studio extends BaseModel {
   @column()
   public nama: string
 
+  @column()
+  public col: number
+
+  @column()
+  public row: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

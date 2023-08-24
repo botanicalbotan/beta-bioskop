@@ -1,10 +1,12 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
 import Studio from 'App/Models/Studio'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema, rules, validator } from '@ioc:Adonis/Core/Validator'
 import Kursi from 'App/Models/Kursi'
 import { kapitalHurufPertama, numToChar } from 'App/customFunction'
 import TierStudio from 'App/Models/TierStudio'
+
+import RawData from 'App/Asli/raw_data'
 
 interface DbTemplateBeta {
     id: string,
@@ -16,11 +18,8 @@ interface DbTemplateBeta {
 }
 
 // ini versi 2.0
-function templateToGridBeta(hasil: DbTemplateBeta[]) {
+function templateToGridBeta(hasil: DbTemplateBeta[], maxCol: number) {
     // sementara predefined max col row
-    // let maxCol = 20
-    let maxCol = 5 // test pertama make 5x10 dulu
-    // let maxRow = 40
     let wadah: Array<Array<DbTemplateBeta>> = []
 
     for (let i = 1; i <= maxCol; i++) {
@@ -29,6 +28,34 @@ function templateToGridBeta(hasil: DbTemplateBeta[]) {
     }
 
     return wadah
+}
+
+async function bikinLayoutNode(stud: Studio) {
+    // ngambil semua template sesuai col row terpilih
+    // PENTING: max row ama col di template harus predefined dan fixed
+    // PENTING: col ama row di request harus lebih kecil dari max row col template
+    let templateTerpilih = await Database
+        .from('templates')
+        .select(
+            'id',
+            'node',
+            'row',
+            'col'
+        )
+        .where('row', '<=', stud.row)
+        .andWhere('col', '<=', stud.col)
+        .orderBy('col', 'asc')
+        .orderBy('row', 'asc')
+
+    for (const iterator of templateTerpilih) {
+        await stud.related('kursis').create({
+            templateId: iterator.id,
+            isKursi: false,
+            harga: 20000, // harga ini buat jaga2 aja, sekarang masih pake dari tier
+            privId: numToChar(Math.floor(Math.random() * 20)) + stud.id + '$' + iterator.node + '$' + numToChar(Math.floor(Math.random() * 20)) + numToChar(Math.floor(Math.random() * 20)),
+            pubId: iterator.node,
+        })
+    }
 }
 
 export default class StudiosController {
@@ -89,7 +116,48 @@ export default class StudiosController {
                 .orderBy('templates.col', 'asc')
                 .orderBy('templates.row', 'asc')
 
-            let grid = templateToGridBeta(base)
+            let grid = templateToGridBeta(base, studio.col)
+
+            // console.log(grid)
+
+            return view.render('1_adminv/studios/view_studio', { studio, grid })
+        } catch (error) {
+            return {
+                msg: 'Studio yang lu cari error bro',
+                err: error.message
+            }
+        }
+    }
+
+    public async setGrid({ view, params }: HttpContextContract) {
+        // SEMENTARA LOM ADA BEDANYA SET GRID AMA INDEX
+        let studioId = params.id
+
+        try {
+            let studio = await Studio.findByOrFail('id', studioId)
+                .catch(() => {
+                    throw new Error('Studio id ga valid atau ga ada')
+                })
+
+            await studio.load('tierStudio')
+
+            let base = await Database
+                .from('kursis')
+                .join('templates', 'kursis.template_id', 'templates.id')
+                .where('studio_id', studioId)
+                .select(
+                    'kursis.pub_id as node',
+                    'kursis.priv_id as id',
+                    'kursis.is_kursi as isKursi',
+                    'kursis.harga as harga',
+                    'templates.col as col',
+                    'templates.row as row'
+                    // segini dulu
+                )
+                .orderBy('templates.col', 'asc')
+                .orderBy('templates.row', 'asc')
+
+            let grid = templateToGridBeta(base, studio.col)
 
             // console.log(grid)
 
@@ -104,6 +172,12 @@ export default class StudiosController {
 
     public async updateGrid({ request, response, params }: HttpContextContract) {
         let studid = params.id
+        console.log('ewe')
+
+        console.log(request.all())
+
+        console.log('awe: ', typeof request.input('update'))
+        console.log(typeof request.input('update'))
 
         // validasi disini
         let updateGridSchema = schema.create({
@@ -126,7 +200,15 @@ export default class StudiosController {
         try {
             // cekk
             const validrequest = await request.validate({
-                schema: updateGridSchema
+                schema: updateGridSchema,
+                reporter: validator.reporters.api,
+                messages: {
+                    'update.*.isKursi.required': 'harus ada kursi',
+                    'update.*.id.required': 'harus ada id',
+                    'update.*.id.exists': 'harus id sesuai db',
+                    'update.array': 'mosok bukan array',
+                    'update.minLength' : 'liat minlengthnya'
+                }
             })
 
             // ubah data db
@@ -146,7 +228,7 @@ export default class StudiosController {
             console.log(error.message)
             return response.badRequest({
                 msg: 'waduh error bro',
-                error: error.message
+                error: error
             })
         }
     }
@@ -173,8 +255,10 @@ export default class StudiosController {
     //  TEST ONLY
     public async simpanStudio({ request, response }: HttpContextContract) {
         // CONSTRAIN INI HARUSNYA PREDEFINED, SESUAI AMA MAX TEMPLATE
-        let maxCol = 5
-        let maxRow = 10
+        let minCol = RawData.minCol
+        let minRow = RawData.minRow
+        let maxCol = RawData.maxCol
+        let maxRow = RawData.maxRow
 
         let nama = request.input('nama')
         let col = request.input('col')
@@ -185,20 +269,20 @@ export default class StudiosController {
                 throw new Error('isi nama dulu bro')
             }
 
-            if(!row || isNaN(row)) {
+            if (!row || isNaN(row)) {
                 throw new Error('panjang row ga valid bro')
             }
-    
-            if(row < 0 || row > maxRow) {
-                throw new Error(`panjang row harus antara 0 - ${maxRow} brooo`)
+
+            if (row < minRow || row > maxRow) {
+                throw new Error(`panjang row harus antara ${minRow} - ${maxRow} brooo`)
             }
 
-            if(!col || isNaN(col)){
+            if (!col || isNaN(col)) {
                 throw new Error('panjang col ga valid bro')
             }
-    
-            if(col < 0 || col > maxCol) {
-                throw new Error(`panjang col harus antara 0 - ${maxCol} brooo`)
+
+            if (col < minRow || col > maxCol) {
+                throw new Error(`panjang col harus antara ${minCol} - ${maxCol} brooo`)
             }
 
             // ngambil semua tier dulu
@@ -215,38 +299,23 @@ export default class StudiosController {
             let stud = await Studio.create({
                 nama: kapitalHurufPertama(nama),
                 tierStudioId: tiers[gachaTier].id,
+                row: row,
+                col: col
             })
 
-            // ngambil semua template sesuai col row terpilih
-            let semuaTemplate = await Database
-            .from('templates')
-            .select(
-                'id',
-                'node',
-                'row',
-                'col'
-            )
-            .orderBy('col', 'asc')
-            .orderBy('row', 'asc')
 
-            for (const iterator of semuaTemplate) {
-                await stud.related('kursis').create({
-                    templateId: iterator.id,
-                    isKursi: false,
-                    harga: 20000,
-                    privId: numToChar(Math.floor(Math.random() * 20)) + stud.id + '$' + iterator.node + '$' + numToChar(Math.floor(Math.random() * 20)) + numToChar(Math.floor(Math.random() * 20)),
-                    pubId: iterator.node,
-                })
-            }
+            // bikin layout nodenya
+            await bikinLayoutNode(stud)
 
             return {
-                msg: 'annjaaayy mantap jaya'
+                msg: 'annjaaayy mantap jaya',
             }
 
         } catch (error) {
+            console.log(error)
             return response.internalServerError({
                 msg: 'waduh ada error brooooooooo',
-                err: error
+                err: error.message
             })
         }
     }

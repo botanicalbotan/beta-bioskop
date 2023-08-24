@@ -64,12 +64,12 @@ Route.group(() => {
 
   Route.group(() => {
     Route.get('/', 'StudiosController.listStudio')
-    Route.get('/baru', 'StudiosController.studioBaru')
-    Route.post('/baru', 'StudiosController.studioBaru') // masih semi-generated
+    // Route.get('/baru', 'StudiosController.studioBaru') 
+    Route.post('/baru', 'StudiosController.simpanStudio') // masih semi-generated
 
     Route.get('/:id', 'StudiosController.viewStudio') // hmmm mungkin sama ama set grid?
-    // Route.get('/:id/update_layout', 'AdminsController.setGrid') // buat liat editor grid
-    Route.post('/:id/update_layout', 'AdminsController.updateGrid')
+    Route.get('/:id/update_layout', 'StudiosController.setGrid') // buat liat editor grid
+    Route.post('/:id/update_layout', 'StudiosController.updateGrid')
 
   }).prefix('studios')
 

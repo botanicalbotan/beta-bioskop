@@ -1,7 +1,7 @@
 import '../css/app.css'
 
 // setup jquery
-global.$ = require('jquery');
+// global.$ = require('jquery');
 
 // function resetSelectKursiTemplate(){
 //     // keknya gajadi kepake, kepake di yang selectKursi aslinya

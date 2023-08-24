@@ -7,6 +7,8 @@ import {
 // import Swal from "sweetalert2"
 import Swal from 'sweetalert2'
 
+import axios from "axios";
+
 // punya luxon
 const { DateTime } = require("luxon");
 
@@ -120,21 +122,18 @@ btCariSlot.addEventListener('click', (e) => {
       Swal.showLoading()
 
       setTimeout(() => {
-        $.get("/adminv/jadwals/cari_slot", {
-          iTanggalTayang: tempTanggal,
-          iStudio: tempStudio
-        },
-          function (data, textStatus, jqXH54R) {
-            // cek data beneran ada
-            if (data.filmsByTanggal && data.filmsByTanggal.length > 0) {
-              wadahFilm = data.filmsByTanggal
-              setIsiFilm(data.filmsByTanggal)
-              updateKeteranganFilmById(data.filmsByTanggal[0].id)
-              IDFILM = data.filmsByTanggal[0].id
-              DURASI = data.filmsByTanggal[0].durasi
+
+        axios.get(`/adminv/jadwals/cari_slot?iTanggalTayang=${tempTanggal}&iStudio=${tempStudio}`)
+          .then((res) => {
+            if (res.data.filmsByTanggal && res.data.filmsByTanggal.length > 0) {
+              wadahFilm = res.data.filmsByTanggal
+              setIsiFilm(res.data.filmsByTanggal)
+              updateKeteranganFilmById(res.data.filmsByTanggal[0].id)
+              IDFILM = res.data.filmsByTanggal[0].id
+              DURASI = res.data.filmsByTanggal[0].durasi
             }
 
-            updateJadwalAktif(data.jadwalsAktif)
+            updateJadwalAktif(res.data.jadwalsAktif)
 
             // set studio ID sama waktu tayang
             IDSTUDIO = tempStudio
@@ -146,20 +145,60 @@ btCariSlot.addEventListener('click', (e) => {
             Swal.close()
 
             mainForm.classList.remove('hidden')
-          },
-          "json"
-        ).catch((xhr) => {
-          console.log(xhr)
-          Swal.fire({
-            icon: 'error',
-            title: 'Terdapat error dari server!',
-            scrollbarPadding: false,
-            text: xhr.responseJSON.msg,
-            confirmButtonText: 'Tutup'
+          })
+          .catch((err) => {
+            console.log(err)
+            Swal.fire({
+              icon: 'error',
+              title: 'Terdapat error dari server!',
+              scrollbarPadding: false,
+              text: err.response.data.msg,
+              confirmButtonText: 'Tutup'
+            })
+
+            resetSlot()
           })
 
-          resetSlot()
-        })
+        // $.get("/adminv/jadwals/cari_slot", {
+        //   iTanggalTayang: tempTanggal,
+        //   iStudio: tempStudio
+        // },
+        //   function (data, textStatus, jqXH54R) {
+        //     // cek data beneran ada
+        //     if (data.filmsByTanggal && data.filmsByTanggal.length > 0) {
+        //       wadahFilm = data.filmsByTanggal
+        //       setIsiFilm(data.filmsByTanggal)
+        //       updateKeteranganFilmById(data.filmsByTanggal[0].id)
+        //       IDFILM = data.filmsByTanggal[0].id
+        //       DURASI = data.filmsByTanggal[0].durasi
+        //     }
+
+        //     updateJadwalAktif(data.jadwalsAktif)
+
+        //     // set studio ID sama waktu tayang
+        //     IDSTUDIO = tempStudio
+        //     ISO_TANGGALTAYANG = tempTanggal
+        //     TANGGALTAYANG = DateTime.fromISO(tempTanggal)
+
+        //     lbTanggalTayang.textContent = DateTime.fromISO(tempTanggal).toFormat('dd LLLL yyyy', { locale: 'id-ID' })
+        //     lbNamaStudio.textContent = tempStudio
+        //     Swal.close()
+
+        //     mainForm.classList.remove('hidden')
+        //   },
+        //   "json"
+        // ).catch((xhr) => {
+        //   console.log(xhr)
+        //   Swal.fire({
+        //     icon: 'error',
+        //     title: 'Terdapat error dari server!',
+        //     scrollbarPadding: false,
+        //     text: xhr.responseJSON.msg,
+        //     confirmButtonText: 'Tutup'
+        //   })
+
+        //   resetSlot()
+        // })
       }, 1000)
     }
   })
@@ -353,34 +392,61 @@ btKirim.addEventListener('click', () => {
         Swal.showLoading()
 
         setTimeout(() => {
-          $.post(window.location.pathname, {
+          axios.post(window.location.pathname, {
             mulaiTayang: ISO_WAKTUTAYANG,
             filmId: IDFILM,
             studioId: IDSTUDIO
-          },
-            function (data, textStatus, jqXH54R) {
-              // cek data beneran ada
-              Swal.fire('WEYYYYYY', 'INPUT BERHASIL BRO', 'success').then(() => {
-                window.location.reload()
-              })
-              
-            },
-            "json"
-          ).catch((xhr) => {
+          })
+          .then((res) => {
+            Swal.fire('WEYYYYYY', 'INPUT BERHASIL BRO', 'success').then(() => {
+              window.location.reload()
+            })
+          })
+          .catch((err) => {
             Swal.fire({
               icon: 'error',
               title: 'Terdapat error dari server!',
               scrollbarPadding: false,
-              text: xhr.responseJSON.msg,
+              text: err.response.data.msg,
               confirmButtonText: 'Tutup'
             }).then(() => {
               // cek tabrakan disini
 
-              if (xhr.responseJSON.idTabrak && (xhr.responseJSON.isTabrakAtas || xhr.responseJSON.isTabrakBawah)) {
-                tandainTabrakan(xhr.responseJSON.idTabrak)
+              if (err.response.data.idTabrak && (err.response.data.isTabrakAtas || err.response.data.isTabrakBawah)) {
+                tandainTabrakan(err.response.data.idTabrak)
               }
             })
           })
+
+          // $.post(window.location.pathname, {
+          //   mulaiTayang: ISO_WAKTUTAYANG,
+          //   filmId: IDFILM,
+          //   studioId: IDSTUDIO
+          // },
+          //   function (data, textStatus, jqXH54R) {
+          //     // cek data beneran ada
+          //     Swal.fire('WEYYYYYY', 'INPUT BERHASIL BRO', 'success').then(() => {
+          //       window.location.reload()
+          //     })
+
+          //   },
+          //   "json"
+          // ).catch((xhr) => {
+          //   Swal.fire({
+          //     icon: 'error',
+          //     title: 'Terdapat error dari server!',
+          //     scrollbarPadding: false,
+          //     text: xhr.responseJSON.msg,
+          //     confirmButtonText: 'Tutup'
+          //   }).then(() => {
+          //     // cek tabrakan disini
+
+          //     if (xhr.responseJSON.idTabrak && (xhr.responseJSON.isTabrakAtas || xhr.responseJSON.isTabrakBawah)) {
+          //       tandainTabrakan(xhr.responseJSON.idTabrak)
+          //     }
+          //   })
+          // })
+
         }, 1000)
       }
     })

@@ -36,7 +36,7 @@ export default class ReservasisController {
                 .orderBy('templates.col', 'asc')
                 .orderBy('templates.row', 'asc')
 
-            let layoutKursi = templateToGridBeta(base)
+            let layoutKursi = templateToGridBeta(base, jadwal.studio.col)
 
 
             return view.render('2_userv/reservasi/reservasi_kursi', { layoutKursi, jadwal })
@@ -60,10 +60,10 @@ interface DbTemplateBeta {
 }
 
 // ini versi 2.0
-function templateToGridBeta(hasil: DbTemplateBeta[]) {
+function templateToGridBeta(hasil: DbTemplateBeta[], maxCol:number) {
     // sementara predefined max col row
     // let maxCol = 20
-    let maxCol = 5 // test pertama make 5x10 dulu
+    // let maxCol = 5 // test pertama make 5x10 dulu
     // let maxRow = 40
     let wadah: Array<Array<DbTemplateBeta>> = []
 

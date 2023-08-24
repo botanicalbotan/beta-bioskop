@@ -1,0 +1,90 @@
+@layout('1_adminv/layout')
+
+@section('more-style')
+
+@endsection
+
+@set('judul', 'Admin: View Studio')
+
+@section('body')
+<div class="space-y-6 p-4">
+    <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+        <div class="flex-1 space-y-4">
+            {{-- kotak film --}}
+            <div class="text-xl font-semibold pb-2" id="studio" data-idstud="{{ studio.id }}">Studio: {{ studio.nama }}
+            </div>
+
+            <div>
+                Sebenernya dari list studio, masuk ke view studio dulu, yang nampilin data2 remeh temeh,
+                sekalian ui buat ngedit data2 studio yang lain, kaya nama, tier dll.
+                Tp welp, lebih penting ini dulu.
+            </div>
+
+            <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Velit ut
+                mollitia porro sequi libero ipsam accusamus aliquam, sed,
+                ducimus dolores expedita necessitatibus blanditiis repellat
+                nihil totam sunt nisi. Blanditiis, consectetur.
+            </div>
+            <div class="flex space-x-2">
+                <div class="p-1 text-sm border border-gray-500">Tier Studio: {{ capitalCase(studio.tierStudio.nama) }}
+                </div>
+                <div class="p-1 text-sm border border-gray-500">Max Col: {{ studio.col }}</div>
+                <div class="p-1 text-sm border border-gray-500">Max Row: {{ studio.row }}</div>
+            </div>
+        </div>
+
+        <div class="flex-none lg:w-1/3 space-y-3 border border-gray-300 rounded p-4 h-min">
+            <div class="text-lg">Edit Layout Disini</div>
+            <div>
+                Pencet tombol ini buat gas ke laman editor layout studio. Lu bisa bikin sesuka lu.
+            </div>
+            <div>
+                <a href="/adminv/studios/{{ studio.id }}/update_layout" class="block px-2 py-1 bg-yellow-300 cursor-pointer rounded items-center text-center hover:bg-yellow-400">
+                    Ubah Layout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="space-y-4">
+        {{-- <div class="font-semibold text-xl">Layout Studio</div> --}}
+
+        <div>
+            {{-- keterangan refresh --}}
+            <div class="mt-6 flex items-center justify-center text-white bg-cyan-500 px-2 py-1">
+                <div class="flex-none font-semibold">LAYOUT TEMPAT DUDUK</div>
+            </div>
+
+            <div class="flex overflow-x-auto items-center justify-center bg-gray-100 p-6">
+                <div class="flex flex-col space-y-1">
+                    @each(col in grid)
+                    <div class="flex space-x-1">
+
+                        @each(item in col)
+
+                        @if(item.isKursi)
+                        <div class="kursi-cgv-template">{{ item.node }}</div>
+                        @else
+                        <div class="bukan-kursi"></div>
+                        @endif
+                        @endeach
+
+                    </div>
+                    @endeach
+
+                    <div>
+                        <div
+                            class="mt-4 flex items-center justify-center border-2 p-0.5 text-xs text-gray-500 bg-gray-300">
+                            Layar
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('script')
+{{--  <script src="{{asset('assets/update_layout.js')}}"></script>  --}}
+@endsection
