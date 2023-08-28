@@ -57,7 +57,8 @@ Encore.addEntry('list_jadwal', './resources/js/adminv/jadwals/list_jadwal.js')
 Encore.addEntry('jadwal_baru', './resources/js/adminv/jadwals/jadwal_baru.js')
 
 Encore.addEntry('studio_baru', './resources/js/adminv/studios/studio_baru.js')
-Encore.addEntry('update_layout', './resources/js/adminv/studios/update_layout.js')
+Encore.addEntry('update_layout_v1', './resources/js/adminv/studios/update_layout_v1.js')
+Encore.addEntry('update_layout_v2', './resources/js/adminv/studios/update_layout_v2.js')
 Encore.addEntry('list_studio', './resources/js/adminv/studios/list_studio.js')
 
 /*

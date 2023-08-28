@@ -67,9 +67,17 @@ Route.group(() => {
     // Route.get('/baru', 'StudiosController.studioBaru') 
     Route.post('/baru', 'StudiosController.simpanStudio') // masih semi-generated
 
-    Route.get('/:id', 'StudiosController.viewStudio') // hmmm mungkin sama ama set grid?
-    Route.get('/:id/update_layout', 'StudiosController.setGrid') // buat liat editor grid
-    Route.post('/:id/update_layout', 'StudiosController.updateGrid')
+    Route.get('/:id', 'StudiosController.viewStudio')
+
+    // v1 ini model lama, yang batch
+    Route.get('/:id/update_layout_v1', 'StudiosController.setGridV1')
+    Route.post('/:id/update_layout_v1', 'StudiosController.updateGridV1')
+
+    // v2 ini yang tiap node diurusin sendiri
+    Route.get('/:id/update_layout_v2', 'StudiosController.setGridV2')
+    Route.post('/:id/update_layout_v2', 'StudiosController.updateGridV2')
+
+    Route.get('/:id/get_node', 'StudiosController.getNodeById')
 
   }).prefix('studios')
 

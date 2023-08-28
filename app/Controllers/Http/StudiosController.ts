@@ -129,7 +129,8 @@ export default class StudiosController {
         }
     }
 
-    public async setGrid({ view, params }: HttpContextContract) {
+    // INI V1
+    public async setGridV1({ view, params }: HttpContextContract) {
         // SEMENTARA LOM ADA BEDANYA SET GRID AMA INDEX
         let studioId = params.id
 
@@ -161,7 +162,7 @@ export default class StudiosController {
 
             // console.log(grid)
 
-            return view.render('1_adminv/studios/update_layout', { studio, grid })
+            return view.render('1_adminv/studios/update_layout_v1', { studio, grid })
         } catch (error) {
             return {
                 msg: 'Studio yang lu cari error bro',
@@ -170,14 +171,8 @@ export default class StudiosController {
         }
     }
 
-    public async updateGrid({ request, response, params }: HttpContextContract) {
+    public async updateGridV1({ request, response, params }: HttpContextContract) {
         let studid = params.id
-        console.log('ewe')
-
-        console.log(request.all())
-
-        console.log('awe: ', typeof request.input('update'))
-        console.log(typeof request.input('update'))
 
         // validasi disini
         let updateGridSchema = schema.create({
@@ -229,6 +224,140 @@ export default class StudiosController {
             return response.badRequest({
                 msg: 'waduh error bro',
                 error: error
+            })
+        }
+    }
+
+    // INI V2
+    public async setGridV2({ view, params, response }: HttpContextContract) {
+        // SEMENTARA LOM ADA BEDANYA SET GRID AMA INDEX
+        let studioId = params.id
+
+        try {
+            let studio = await Studio.findByOrFail('id', studioId)
+                .catch(() => {
+                    throw new Error('Studio id ga valid atau ga ada')
+                })
+
+            await studio.load('tierStudio')
+
+            let base = await Database
+                .from('kursis')
+                .join('templates', 'kursis.template_id', 'templates.id')
+                .where('studio_id', studioId)
+                .select(
+                    'kursis.pub_id as node',
+                    'kursis.priv_id as id',
+                    'kursis.is_kursi as isKursi',
+                    'kursis.harga as harga',
+                    'templates.col as col',
+                    'templates.row as row'
+                    // segini dulu
+                )
+                .orderBy('templates.col', 'asc')
+                .orderBy('templates.row', 'asc')
+
+            let grid = templateToGridBeta(base, studio.col)
+
+            // console.log(grid)
+
+            return view.render('1_adminv/studios/update_layout_v2', { studio, grid })
+        } catch (error) {
+            return response.badRequest({
+                msg: 'Studio yang lu cari error bro',
+                err: error.message
+            })
+        }
+    }
+
+    public async updateGridV2({ params, request, response }: HttpContextContract) {
+        let studioId = params.id
+        
+        // validasi disini
+        let updateGridSchema = schema.create({
+            label: schema.string([
+                rules.minLength(1),
+                rules.maxLength(10),
+                rules.trim()
+            ]),
+            nodeId: schema.string([
+                rules.exists({
+                    table: 'kursis',
+                    column: 'priv_id',
+                    where: {
+                        studio_id: studioId
+                    }
+                })
+            ]),
+            isKursi: schema.boolean(),
+        })
+
+        try {
+            await Studio.findByOrFail('id', studioId)
+                .catch(() => {
+                    throw new Error('Studio id ga valid atau ga ada')
+                })
+
+            // cekk
+            const validrequest = await request.validate({
+                schema: updateGridSchema,
+                messages: {
+                    'label.required': 'harus ada label bro',
+                    'label.minLength': 'label minimal 1 karakter bro',
+                    'label.maxLength': 'label maksimal 10 karakter bro',
+                    'nodeId.required': 'harus ada nodeId bro',
+                    'nodeId.exist': 'node lu ngga valid bro',
+                    'isKursi.required': 'harus ada isKursi bro',
+                }
+            })
+
+            // pake datanya
+            const nodeTarget = await Kursi.findByOrFail('priv_id', validrequest.nodeId)
+            nodeTarget.pubId = validrequest.label
+            nodeTarget.isKursi = validrequest.isKursi
+            await nodeTarget.save()
+
+            return {
+                msg: 'Berhasil broo'
+            }
+            // return view.render('1_adminv/studios/update_layout_v1', { studio })
+        } catch (error) {
+            return response.badRequest({
+                msg: error.message
+            })
+        }
+    }
+
+    public async getNodeById({ params, request, response }: HttpContextContract) {
+        let studioId = params.id
+        let nodeId = request.input('id')
+
+        try {
+            let studio = await Studio.findByOrFail('id', studioId)
+                .catch(() => {
+                    throw new Error('Studio id ga valid atau ga ada')
+                })
+
+            let nodeTarget = await Kursi.findByOrFail('priv_id', nodeId)
+                .catch(() => {
+                    throw new Error('Node id ga valid atau ga ada')
+                })
+
+            // cek validasi
+            if(nodeTarget.studioId != studio.id){
+                throw new Error('Node dan studio ga singkron')
+            }
+
+            await nodeTarget.load('template')
+
+            return {
+                lokasiNode: nodeTarget.template.node,
+                label: nodeTarget.pubId,
+                isKursi: nodeTarget.isKursi
+            }
+        } catch (error) {
+            return response.badRequest({
+                msg: error.message
             })
         }
     }

@@ -8,7 +8,8 @@
   "assets/list_jadwal.js": "http://localhost:8080/assets/list_jadwal.js",
   "assets/jadwal_baru.js": "http://localhost:8080/assets/jadwal_baru.js",
   "assets/studio_baru.js": "http://localhost:8080/assets/studio_baru.js",
-  "assets/update_layout.js": "http://localhost:8080/assets/update_layout.js",
+  "assets/update_layout_v1.js": "http://localhost:8080/assets/update_layout_v1.js",
+  "assets/update_layout_v2.js": "http://localhost:8080/assets/update_layout_v2.js",
   "assets/list_studio.js": "http://localhost:8080/assets/list_studio.js",
   "assets/vendors-node_modules_tw-elements_dist_js_chart_es_js.js": "http://localhost:8080/assets/vendors-node_modules_tw-elements_dist_js_chart_es_js.js",
   "assets/vendors-node_modules_tw-elements_dist_js_chartjs-plugin-datalabels_es_js.js": "http://localhost:8080/assets/vendors-node_modules_tw-elements_dist_js_chartjs-plugin-datalabels_es_js.js"

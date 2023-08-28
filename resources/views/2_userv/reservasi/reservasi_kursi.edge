@@ -4,7 +4,7 @@
 
 @endsection
 
-@set('judul', 'Admin: Update Layout')
+@set('judul', 'User: Reservasi Kursi')
 
 @section('body')
 <div class="space-y-6 p-4">
@@ -19,7 +19,7 @@
             {{-- kotak film --}}
             <div class="text-2xl font-semibold" id="tes">{{ jadwal.film.nama }}</div>
 
-            <div class="mb-4 flex space-x-4">
+            <div class="mb-4 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
                 <div class="flex items-center">
                     <svg fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -92,7 +92,7 @@
 
         <div>
             {{--  keterangan refresh  --}}
-            <div class="flex text-white bg-primary-600 px-2 py-1">
+            <div class="flex text-white bg-neutral-700 px-2 py-1">
                 <div class="flex-1 text-sm flex justify-start items-center">
                     <div>Terakhir diperbarui: <span class="mr-2">tgl refresh</span></div>
                 </div>
@@ -121,7 +121,7 @@
                     @endeach
 
                     <div>
-                        <div class="mt-4 flex items-center justify-center border-2 p-0.5 text-xs text-gray-500 bg-gray-300">
+                        <div class="mt-4 flex items-center justify-center border-2 p-0.5 text-xs text-white bg-slate-600">
                             Layar
                         </div>
                     </div>

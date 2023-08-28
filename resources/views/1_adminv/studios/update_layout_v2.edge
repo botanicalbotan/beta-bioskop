@@ -1,0 +1,100 @@
+@layout('1_adminv/layout')
+
+@section('more-style')
+
+@endsection
+
+@set('judul', 'Admin: Update Layout V2')
+
+@section('body')
+<div class="space-y-6 p-4">
+
+    <div class="font-semibold text-xl text-center">
+        <div>LAYOUT EDITOR</div>
+        <div id="studio" data-idstud="{{ studio.id }}">Studio: {{ capitalCase(studio.nama) }}</div>
+    </div>
+
+    <div class="space-y-4">
+
+        <div class="flex items-end underline">
+            <div>
+                Max Col: {{ studio.col }}, Max Row: {{ studio.row }}
+            </div>
+        </div>
+
+        <div class="flex overflow-x-auto items-center justify-center bg-gray-100 px-10 py-12">
+            <div class="flex flex-col">
+                @each(col in grid)
+                <div class="flex space-x-1">
+
+                    @each(item in col)
+                    @if(item.isKursi)
+                    <div class="kursi-cgv-template" data-id="{{ item.id }}" data-iskursi="{{ item.isKursi }}">{{
+                        item.node }}</div>
+                    @else
+                    <div class="kursi-cgv-template bukan-kursi" data-id="{{ item.id }}"
+                        data-iskursi="{{ item.isKursi }}">*</div>
+                    @endif
+                    @endeach
+
+                </div>
+                @endeach
+
+                <div class="">
+                    <div class="mt-4 flex items-center justify-center border-2 p-0.5 text-xs text-white bg-slate-600 cant-block-text">
+                        Layar
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="flex p-4 border-2 text-sm">
+        Klik salah satu node untuk ngubah properti node tersebut, misal buat ngubah dia jadi kursi atau bukan, atau
+        ngasi label tertentu kalau tuh node adalah kursi. Nantinya, node-node yang bukan kursi ngga bakal dirender di userview.
+    </div>
+
+    <div class="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
+        {{-- <div class="flex-1 flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
+
+            <div class="flex-1 text-sm">
+                Ini kalau make konsep 1, pelabelan ID kursi dilakuin semi-auto dari sistem dengan beberapa kustomisasi.
+                Coba aja dulu, kalau sempet gw bikin satunya.
+            </div>
+
+            <div class="flex-1 flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
+                <div class="flex-1">
+                    <select id="selSortCol" data-te-select-init>
+                        <option value="1">Kiri - Kanan</option>
+                        <option value="2">Kanan - Kiri</option>
+                    </select>
+                    <label data-te-select-label-ref>Urutan ID Kolom (Huruf)</label>
+                </div>
+                <div class="flex-1">
+                    <select id="selSortRow" data-te-select-init>
+                        <option value="1">Atas - Bawah</option>
+                        <option value="2">Bawah - Atas</option>
+                    </select>
+                    <label data-te-select-label-ref>Urutan ID Baris (Angka)</label>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="flex-none lg:w-1/5">
+            <div id="simpanLayout"
+                class="px-2 py-1 bg-yellow-300 cursor-pointer rounded items-center text-center hover:bg-yellow-400">
+                Simpan Layout</div>
+        </div> --}}
+    </div>
+
+</div>
+@endsection
+
+@section('script')
+<script src="{{asset('assets/update_layout_v2.js')}}"></script>
+@endsection

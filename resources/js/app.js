@@ -1,5 +1,13 @@
 import '../css/app.css'
 
+// Initialization for ES Users
+import {
+    Collapse,
+    initTE,
+  } from "tw-elements";
+  
+  initTE({ Collapse });
+
 // setup jquery
 // global.$ = require('jquery');
 
