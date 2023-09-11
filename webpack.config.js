@@ -46,12 +46,20 @@ Encore.setPublicPath('/assets')
 |
 */
 Encore.addEntry('app', './resources/js/app.js')
+Encore.addEntry('u_app', './resources/js/userv_app.js')
+Encore.addEntry('u_pilih_user', './resources/js/userv/pilih_user.js')
 
-Encore.addEntry('bioskop', './resources/js/userv/bioskop.js')
+Encore.addEntry('u_bioskop', './resources/js/userv/bioskop.js')
 Encore.addEntry('u_home', './resources/js/userv/home.js')
-Encore.addEntry('u_reservasi_kursi', './resources/js/userv/reservasi_kursi.js')
+Encore.addEntry('u_reservasi_kursi', './resources/js/userv/reservasi/reservasi_kursi.js')
+Encore.addEntry('u_list_reservasi', './resources/js/userv/reservasi/list_reservasi.js')
+Encore.addEntry('u_checkout_invoice', './resources/js/userv/reservasi/checkout_invoice.js')
+Encore.addEntry('u_checkout_pembayaran', './resources/js/userv/reservasi/checkout_pembayaran.js')
+
 
 Encore.addEntry('list_film', './resources/js/adminv/films/list_film.js')
+
+Encore.addEntry('list_kupon', './resources/js/adminv/kupons/list_kupon.js')
 
 Encore.addEntry('list_jadwal', './resources/js/adminv/jadwals/list_jadwal.js')
 Encore.addEntry('jadwal_baru', './resources/js/adminv/jadwals/jadwal_baru.js')

@@ -1,6 +1,6 @@
 import '../css/app.css'
 
-// Initialization for ES Users
+// Ini buat navbar
 import {
     Collapse,
     initTE,
@@ -13,7 +13,7 @@ import {
 
 // function resetSelectKursiTemplate(){
 //     // keknya gajadi kepake, kepake di yang selectKursi aslinya
-//     // let prev = document.getElementsByClassName('kursi-cgv-template bukan-kursi selected')
+//     // let prev = document.getElementsByClassName('kursi-adminv bukan-kursi selected')
 // }
 
 // function selectKursiTemplate(event){
@@ -92,7 +92,7 @@ import {
 
 
 // // set semua DOM kursi template
-// let kursiTemplate = document.getElementsByClassName('kursi-cgv-template')
+// let kursiTemplate = document.getElementsByClassName('kursi-adminv')
 
 // // gabisa pake foreach
 // for(let i=0; i< kursiTemplate.length; i++){

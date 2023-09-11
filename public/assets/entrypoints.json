@@ -8,9 +8,22 @@
         "http://localhost:8080/assets/app.js"
       ]
     },
-    "bioskop": {
+    "u_app": {
+      "css": [
+        "http://localhost:8080/assets/u_app.css"
+      ],
       "js": [
-        "http://localhost:8080/assets/bioskop.js"
+        "http://localhost:8080/assets/u_app.js"
+      ]
+    },
+    "u_pilih_user": {
+      "js": [
+        "http://localhost:8080/assets/u_pilih_user.js"
+      ]
+    },
+    "u_bioskop": {
+      "js": [
+        "http://localhost:8080/assets/u_bioskop.js"
       ]
     },
     "u_home": {
@@ -23,9 +36,29 @@
         "http://localhost:8080/assets/u_reservasi_kursi.js"
       ]
     },
+    "u_list_reservasi": {
+      "js": [
+        "http://localhost:8080/assets/u_list_reservasi.js"
+      ]
+    },
+    "u_checkout_invoice": {
+      "js": [
+        "http://localhost:8080/assets/u_checkout_invoice.js"
+      ]
+    },
+    "u_checkout_pembayaran": {
+      "js": [
+        "http://localhost:8080/assets/u_checkout_pembayaran.js"
+      ]
+    },
     "list_film": {
       "js": [
         "http://localhost:8080/assets/list_film.js"
+      ]
+    },
+    "list_kupon": {
+      "js": [
+        "http://localhost:8080/assets/list_kupon.js"
       ]
     },
     "list_jadwal": {

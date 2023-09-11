@@ -212,19 +212,6 @@ export default class JadwalsController {
                 postInterlude: targetPostInter
             })
 
-            
-
-            // return {
-            //     durasi: film.durasi,
-            //     targetTayang: targetTayang.toString(),
-            //     targetSelesai: targetSelesai.toString(),
-            //     targetPostInter: targetPostInter.toString(),
-            //     cekAiring: isFilmAiring,
-            //     cekTabrakan: isTabrakAtas || isTabrakBawah,
-            //     deketAtasTabrakan,
-            //     deketBawahTabrakan
-            // }
-
             return response.accepted({
                 message: 'Data jadwal berhasil ditambahkan!'
             })

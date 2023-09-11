@@ -4,8 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components{
-  .cant-block-text{
+@layer components {
+  .cant-block-text {
     -webkit-user-select: none;
     /* Safari */
     -ms-user-select: none;
@@ -14,7 +14,7 @@
     /* Standard syntax */
   }
 
-  .kursi-cgv-ori{
+  .kursi-cgv-ori {
     display: block;
     background: #745012;
     text-align: center;
@@ -26,39 +26,18 @@
     height: 18px;
     color: #FFF;
     border-radius: 4px;
-    cursor:pointer
+    cursor: pointer
   }
 
-    /* di aslinya, ada state kursi, bukan-kursi, sama bukan-kursi-selected */
-
-  .kursi-cgv{
-    display: block;
-    text-align: center;
-    line-height: 18px;
-    font-size: 8px;
-    font-weight: bold;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    width: 18px;
-    height: 18px;
-    color: #FFF;
-    border-radius: 4px;
-    cursor:pointer;
-    @apply bg-yellow-300 cant-block-text
-  }
-
-  .kursi-cgv.selected{
-    @apply bg-blue-600
-  }
-
-  /* di tempalte, ada state kursi sama bukan-kursi */
-  .bukan-kursi{
+  /* DIBAWAH INI KURSI BUAT ADMINV */
+  .bukan-kursi {
     display: block;
     text-align: center;
     width: 18px;
     height: 18px;
   }
 
-  .kursi-cgv-template{
+  .kursi-adminv {
     display: block;
     text-align: center;
     line-height: 18px;
@@ -73,18 +52,44 @@
     @apply bg-yellow-300 cant-block-text
   }
 
-  .kursi-cgv-template.bukan-kursi{
+  /* ini v1 */
+  .kursi-adminv.bukan-kursi {
     @apply bg-gray-400
   }
 
-  /* .kursi-cgv-template.bukan-kursi.selection{
+  /* DIBAWAH INI KURSI BUAT RESERVASI / USER */
+
+  .kursi-userv {
+    display: block;
+    text-align: center;
+    line-height: 18px;
+    font-size: 8px;
+    font-weight: bold;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    width: 18px;
+    height: 18px;
+    color: #FFF;
+    border-radius: 4px;
+    cursor: pointer;
+    @apply bg-yellow-300 cant-block-text
+  }
+
+  .kursi-userv.selected {
+    @apply bg-blue-600
+  }
+
+  .kursi-userv.terisi {
+    @apply bg-gray-400
+  }
+
+  /* .kursi-adminv.bukan-kursi.selection{
     @apply bg-gray-400
   } */
 
-    /* kebawah ini legacy */
+  /* kebawah ini legacy */
 
 
-  .kursi{
+  /* .kursi{
     @apply text-xs flex-1 justify-center text-center
     rounded bg-gray-400 cursor-pointer cant-block-text
   }
@@ -100,9 +105,45 @@
 
   .kursi-terpilih{
     @apply bg-yellow-300 !important;
-  }
+  } */
 
+  /* .tooltip {
+    position: relative;
+    display: inline-block;
+  }
   
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 140px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -75px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  } */
+
+  /* .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  } */
 }
 
 /* html, body {

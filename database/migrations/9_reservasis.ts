@@ -12,16 +12,15 @@ export default class extends BaseSchema {
       // this BS, cuma iseng aja
       table.string('metode_bayar', 20).notNullable()
       table.string('validasi_bayar').notNullable()
+      table.integer('jadwal_id').unsigned().references('jadwals.id').notNullable()
+      table.integer('user_id').unsigned().references('users.id').notNullable()
 
+      // kursinya jadi bisa 1 atau lebih?
+      // keknya bakal diganti, termasuk bawahnya juga
+      // table.integer('kursi_id').unsigned().references('kursis.id').notNullable()
       // buat nyocokin pas dateng ke tempat
       table.string('token').notNullable()
       table.boolean('is_used').notNullable().defaultTo(0)
-
-      table.integer('kursi_id').unsigned().references('kursis.id').notNullable()
-      table.integer('jadwal_id').unsigned().references('jadwals.id').notNullable()
-
-      // sementara masih bukan FK
-      table.integer('penonton_id').unsigned().notNullable().defaultTo(1)
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

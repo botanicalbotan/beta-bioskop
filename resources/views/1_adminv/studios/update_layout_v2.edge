@@ -29,10 +29,10 @@
 
                     @each(item in col)
                     @if(item.isKursi)
-                    <div class="kursi-cgv-template" data-id="{{ item.id }}" data-iskursi="{{ item.isKursi }}">{{
+                    <div class="kursi-adminv" data-id="{{ item.id }}" data-iskursi="{{ item.isKursi }}">{{
                         item.node }}</div>
                     @else
-                    <div class="kursi-cgv-template bukan-kursi" data-id="{{ item.id }}"
+                    <div class="kursi-adminv bukan-kursi" data-id="{{ item.id }}"
                         data-iskursi="{{ item.isKursi }}">*</div>
                     @endif
                     @endeach

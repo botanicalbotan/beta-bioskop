@@ -47,34 +47,36 @@
   </div>
 
 
-  <div class="grid grid-flow-col gap-4">
-    @if(tanggalAvail.length > 0)
-    @each(tang in tanggalAvail)
-    @if(tang.isTarget)
-    <a href="/userv/jadwals/{{ currentStudio.id }}/{{ tang.tgl.toFormat('yyyy-MM-dd') }}" class="p-1 space-x-4 flex flex-row items-center bg-primary-500 text-white">
-      <div class="w-1/3 font-semibold text-xl flex justify-end">
-        <span>{{ tang.tgl.day }}</span>
-      </div>
-      <div class="flex-1 flex flex-col text-xs">
-        <div>{{ tang.tgl.toFormat('cccc') }}</div>
-        <div>{{ tang.tgl.toFormat('LLL') }}</div>
-      </div>
-    </a>
-    @else
-    <a href="/userv/jadwals/{{ currentStudio.id }}/{{ tang.tgl.toFormat('yyyy-MM-dd') }}" class="p-1 space-x-4 flex flex-row items-center">
-      <div class="w-1/3 font-semibold text-xl flex justify-end">
-        <span>{{ tang.tgl.day }}</span>
-      </div>
-      <div class="flex-1 flex flex-col text-xs">
-        <div>{{ tang.tgl.toFormat('cccc') }}</div>
-        <div>{{ tang.tgl.toFormat('LLL') }}</div>
-      </div>
-    </a>
-    @endif
-    @endeach
-    @else
-
-    @endif
+  <div class=" overflow-x-auto">
+    <div class="grid grid-flow-col gap-4">
+      @if(tanggalAvail.length > 0)
+      @each(tang in tanggalAvail)
+      @if(tang.isTarget)
+      <a href="/userv/jadwals/{{ currentStudio.id }}/{{ tang.tgl.toFormat('yyyy-MM-dd') }}" class="p-1 space-x-4 flex flex-row items-center bg-primary-500 text-white">
+        <div class="w-1/3 font-semibold text-xl flex justify-end">
+          <span>{{ tang.tgl.day }}</span>
+        </div>
+        <div class="flex-1 flex flex-col text-xs">
+          <div>{{ tang.tgl.toFormat('cccc') }}</div>
+          <div>{{ tang.tgl.toFormat('LLL') }}</div>
+        </div>
+      </a>
+      @else
+      <a href="/userv/jadwals/{{ currentStudio.id }}/{{ tang.tgl.toFormat('yyyy-MM-dd') }}" class="p-1 space-x-4 flex flex-row items-center">
+        <div class="w-1/3 font-semibold text-xl flex justify-end">
+          <span>{{ tang.tgl.day }}</span>
+        </div>
+        <div class="flex-1 flex flex-col text-xs">
+          <div>{{ tang.tgl.toFormat('cccc') }}</div>
+          <div>{{ tang.tgl.toFormat('LLL') }}</div>
+        </div>
+      </a>
+      @endif
+      @endeach
+      @else
+  
+      @endif
+    </div>
   </div>
 
   <div class="space-y-4">

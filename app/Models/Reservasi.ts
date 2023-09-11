@@ -1,7 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, ManyToMany, belongsTo, column, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Jadwal from './Jadwal'
 import Kursi from './Kursi'
+import Kupon from './Kupon'
+import User from './User'
 
 export default class Reservasi extends BaseModel {
   @column({ isPrimary: true })
@@ -32,15 +34,36 @@ export default class Reservasi extends BaseModel {
   public updatedAt: DateTime
 
 
+
+  @column()
+  public userId: number
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
   @column()
   public jadwalId: number
 
   @belongsTo(() => Jadwal)
   public jadwal: BelongsTo<typeof Jadwal>
 
-  @column()
-  public kursiId: number
+  // jadinya make N-to-N tanpa perantara aja
+  @manyToMany(() => Kursi, {
+    pivotTable: 'reservasi_kursis',
+    localKey: 'id',
+    pivotForeignKey: 'reservasi_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'kursi_id',
+  })
+  public kursis: ManyToMany<typeof Kursi>
 
-  @belongsTo(() => Kursi)
-  public kursi: BelongsTo<typeof Kursi>
+  // jadinya make N-to-N tanpa perantara aja
+  @manyToMany(() => Kupon, {
+    pivotTable: 'pake_kupons',
+    localKey: 'id',
+    pivotForeignKey: 'reservasi_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'kupon_id',
+  })
+  public kupons: ManyToMany<typeof Kupon>
 }

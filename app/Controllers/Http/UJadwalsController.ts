@@ -36,7 +36,8 @@ export default class UJadwalsController {
                 )
                 .select(
                     Database.from('kursis as a')
-                        .join('reservasis', 'reservasis.kursi_id', 'a.id')
+                        .join('reservasi_kursis', 'reservasi_kursis.kursi_id', 'a.id')
+                        .join('reservasis', 'reservasi_kursis.reservasi_id', 'reservasis.id')
                         .whereColumn('reservasis.jadwal_id', 'jadwals.id')
                         .count('a.id')
                         .as('jumlahDipesan')
@@ -128,7 +129,9 @@ export default class UJadwalsController {
                 )
                 .select(
                     Database.from('kursis as a')
-                        .join('reservasis', 'reservasis.kursi_id', 'a.id')
+                        // .join('reservasis', 'reservasis.kursi_id', 'a.id')
+                        .join('reservasi_kursis', 'reservasi_kursis.kursi_id', 'a.id')
+                        .join('reservasis', 'reservasi_kursis.reservasi_id', 'reservasis.id')
                         .whereColumn('reservasis.jadwal_id', 'jadwals.id')
                         .count('a.id')
                         .as('jumlahDipesan')

@@ -1,0 +1,288 @@
+@layout('2_userv/layout')
+
+@section('more-style')
+
+@endsection
+
+@set('judul', 'User: Reservasi Kursi')
+
+@section('body')
+<div class="space-y-6 p-4">
+    <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+        <div class="flex-none p-2 flex justify-center">
+            <div class="flex items-center justify-center w-28 h-36 bg-slate-500">
+                <span>Foto</span>
+            </div>
+        </div>
+
+        <div class="flex-1 space-y-4">
+            {{-- kotak film --}}
+            <div class="text-2xl font-semibold" id="tes">{{ invoice.jadwal.film.nama }}</div>
+
+            <div class="mb-4 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+                <div class="flex items-center">
+                    <svg fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"></path>
+                    </svg>
+                    <span class="ml-1">NAMA BIOSKOP</span>
+                </div>
+                <div class="flex items-center">
+                    <svg fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z">
+                        </path>
+                    </svg>
+                    <span class="ml-1">{{ invoice.jadwal.filmMulai.toFormat('ff') }}</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round"
+                            d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z">
+                        </path>
+                    </svg>
+                    <span class="ml-1">Studio {{ invoice.jadwal.studio.nama }}</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex space-x-2 max-w-xs">
+                    <div class="flex-none flex w-32">
+                        <span class="flex-1">Tipe Layar</span>
+                        <span class="flex-none">:</span>
+                    </div>
+                    <div class="flex-1">Masih Kosong</div>
+                </div>
+
+                <div class="flex space-x-2 max-w-xs">
+                    <div class="flex-none flex w-32">
+                        <span class="flex-1">Tipe Audio</span>
+                        <span class="flex-none">:</span>
+                    </div>
+                    <div class="flex-1">Masih Kosong</div>
+                </div>
+            </div>
+
+            <div class="flex space-x-2">
+                {{-- <div class="p-1 border border-gray-500">Tier Studio: {{ studio.tierStudio.nama }}</div> --}}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="space-y-4">
+        {{-- <div class="font-semibold text-xl">Editor Layout Studio</div> --}}
+
+        <div id="data-simpanan" data-harga="{{ invoice.hargaLock }}" data-lock="{{ invoice.lockUntil }}"
+            data-banyak="{{ invoice.kursis.length }}">
+            {{-- keterangan refresh --}}
+            <div class="flex text-white bg-neutral-700 px-2 py-1">
+                <div class="flex-1 text-sm flex justify-start items-center">
+                    <div>Dilepas pada: <span class="mr-2" id="lbCountdown">Countdown</span></div>
+                </div>
+                <div class="flex-none font-semibold hidden sm:block">KONFIRMASI PEMBAYARAN</div>
+                <div class="flex-1 text-sm flex justify-end items-center">
+                    <div href="#" id="" class="underline cursor-pointer">Refresh</div>
+                </div>
+            </div>
+
+            {{-- ntar disini --}}
+            <div class="flex p-4 flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-gray-100">
+                <div class="flex-1 flex flex-col space-y-4">
+                    <div class="border-2 p-4 bg-white">
+                        <div class="font-semibold text-xl mb-4">
+                            Kupon
+                        </div>
+
+                        <div class="mb-2 flex flex-col md:flex-row space-y-2 md:space-y-0  md:space-x-2">
+                            <div class="flex-1 relative mb-3 max-w-md" data-te-input-wrapper-init>
+                                <input type="text"
+                                    class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                    id="inCekKupon" placeholder="Masukkan kupon" />
+                                <label for="inCekKupon"
+                                    class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Masukkan
+                                    Kupon
+                                </label>
+                            </div>
+                            <div class="flex-none">
+                                <button id="btCekKupon" class="w-full px-2 py-1.5 bg-yellow-300 hover:bg-yellow-400 rounded">Cek
+                                    Kupon</button>
+                            </div>
+                        </div>
+
+                        <div id="wadahKupon" class="flex flex-row p-4 bg-yellow-100">
+                            <div class="flex-1 text-sm">
+                                <div id="judulKupon" class="font-semibold">Judul Kupon</div>
+                                <div id="keteranganKupon">Keterangan Kupon</div>
+                            </div>
+                            <div id="hapusKupon"
+                                class="flex-none flex text-yellow-600 hover:text-yellow-700 items-center justify-center">
+                                <svg fill="none" class="w-5 h-5" stroke="currentColor" stroke-width="1.5"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-2 p-4 bg-white">
+                        <div class="font-semibold text-xl mb-4">
+                            Opsi Pembayaran
+                        </div>
+
+                        <!--Pills navigation-->
+                        <ul class="mb-5 flex list-none flex-col flex-wrap pl-0 md:flex-row" id="pills-tab"
+                            role="tablist" data-te-nav-ref>
+                            <li role="presentation">
+                                <a href="#pills-bbpoint"
+                                    class="my-2 block rounded bg-yellow-200 px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight  text-yellow-600 data-[te-nav-active]:!bg-yellow-300 data-[te-nav-active]:text-yellow-700 md:mr-4"
+                                    id="pills-bbpoint-tab" data-te-toggle="pill" data-te-target="#pills-bbpoint"
+                                    data-te-nav-active role="tab" aria-controls="pills-bbpoint" aria-selected="true">BB
+                                    Point</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#pills-debit"
+                                    class="my-2 block rounded bg-yellow-200 px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight  text-yellow-600 data-[te-nav-active]:!bg-yellow-300 data-[te-nav-active]:text-yellow-700 md:mr-4""
+                                    id="pills-debit-tab" data-te-toggle="pill" data-te-target="#pills-debit"
+                                    role="tab" aria-controls="pills-debit" aria-selected="false">Debit Transfer</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#pills-kredit"
+                                    class="my-2 block rounded bg-yellow-200 px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight  text-yellow-600 data-[te-nav-active]:!bg-yellow-300 data-[te-nav-active]:text-yellow-700 md:mr-4""
+                                    id="pills-kredit-tab" data-te-toggle="pill" data-te-target="#pills-kredit"
+                                    role="tab" aria-controls="pills-kredit" aria-selected="false">Kartu Kredit</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#pills-lain"
+                                    class="my-2 block rounded bg-yellow-200 px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight  text-yellow-600 data-[te-nav-active]:!bg-yellow-300 data-[te-nav-active]:text-yellow-700 md:mr-4""
+                                    id="pills-lain-tab" data-te-toggle="pill" data-te-target="#pills-lain" role="tab"
+                                    aria-controls="pills-lain" aria-selected="false">Lainnya</a>
+                            </li>
+
+                        </ul>
+
+                        <!--Pills content-->
+                        <div class="mb-6">
+                            <div class="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+                                id="pills-bbpoint" role="tabpanel" aria-labelledby="pills-bbpoint-tab"
+                                data-te-tab-active>
+                                @include('2_userv/reservasi/pills/bb_point')
+                            </div>
+                            <div class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+                                id="pills-debit" role="tabpanel" aria-labelledby="pills-debit-tab">
+                                @include('2_userv/reservasi/pills/debit_transfer')
+                            </div>
+                            <div class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+                                id="pills-kredit" role="tabpanel" aria-labelledby="pills-kredit-tab">
+                                @include('2_userv/reservasi/pills/kartu_kredit')
+                            </div>
+                            <div class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+                                id="pills-lain" role="tabpanel" aria-labelledby="pills-lain-tab">
+                                @include('2_userv/reservasi/pills/lain')
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="flex-1 lg:w-1/3 lg:flex-none flex flex-col">
+                    <div class="border-2 p-4 h-full bg-white flex flex-col lg:relative">
+                        <div class=" pb-36">
+                            <div class="font-semibold text-xl mb-4">Detail Pembayaran</div>
+                            <div class="p-2 border-2 flex space-x-2">
+                                <div class="w-1/4 flex text-3xl font-semibold items-center justify-center bg-gray-200">
+                                    <span class="">{{ invoice.kursis.length }}</span>
+                                    <span>x</span>
+                                </div>
+                                <div class="border-r-2 border-dashed"></div>
+                                <div class="flex-1 bg-yellow-200 p-4">
+                                    <div class="text-sm font-semibold">
+                                        Tiket {{ sentenceCase(invoice.jadwal.studio.tierStudio.nama)}}
+                                    </div>
+                                    <div class="text-lg">
+                                        {{ fungsi.rupiahParser(invoice.hargaLock) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 p-4 flex space-x-2">
+                                <div class="flex-1 font-semibold">Nomor Kursi:</div>
+                                <div class="flex-1 flex flex-wrap justify-end space-x-1 font-semibold">
+                                    @if(listKursi)
+                                      <div>{{ listKursi }}</div>
+                                    @else
+                                      <div>-</div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="mt-2 space-y-1">
+                                <div class="border-b-2 p-4">
+                                    <div class="font-semibold">Sub Total</div>
+                                    <div class="flex space-x-2">
+                                        <div class="flex-1">{{ invoice.kursis.length + ' x ' +
+                                            fungsi.rupiahParser(invoice.hargaLock) }}</div>
+                                        <div class="flex-none">{{ fungsi.rupiahParser(invoice.hargaLock *
+                                            invoice.kursis.length) }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="border-b-2 p-4">
+                                    <div class="font-semibold">Biaya Lainnya</div>
+                                    <div class="flex space-x-2">
+                                        <div class="flex-1">Ongkos Layanan</div>
+                                        <div class="flex-none" id="lbOngkosPembayaran">Rp 0</div>
+                                    </div>
+                                </div>
+
+                                <div class="p-4">
+                                    <div class="font-semibold">Diskon & Kupon</div>
+                                    <div id="wadahKuponSamping">
+                                        <div class="flex space-x-2">
+                                            <div class="flex-1 flex-wrap">Keterangan disini, bisa jadi bakal panjang banget sih, cobain aja</div>
+                                            <div class="flex-none">-Rp 80.000</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="lg:absolute lg:bottom-4 lg:pt-4 lg:inset-x-0">
+                            <div class="text-center mb-6">
+                                <div class="text-xl font-semibold">Grand Total</div>
+                                <div id="lbGrandTotal" class="text-4xl font-bold">{{
+                                    fungsi.rupiahParser(invoice.hargaLock * invoice.kursis.length) }}</div>
+                            </div>
+
+                            <div class="flex px-4 space-x-4 items-center justify-center">
+                                <button id="btBatal"
+                                    class=" px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 w-full lg:w-56">Batal</button>
+                                <button id="btLanjut"
+                                    class=" px-4 py-2 rounded bg-yellow-300 hover:bg-yellow-400 disabled:bg-gray-300 w-full lg:w-56">Selanjutnya</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if(flashMessages.has('alertError'))
+    <div class="px-4 text-center text-red-500">
+        {{ flashMessages.get('alertError') }}
+    </div>
+    @endif
+
+</div>
+@endsection
+
+@section('script')
+<script src="{{asset('assets/u_checkout_invoice.js')}}"></script>
+@endsection

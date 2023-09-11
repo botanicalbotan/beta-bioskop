@@ -173,7 +173,7 @@ simpanLayout.addEventListener('click', () => {
 })
 
 // set semua DOM kursi template
-let kursiTemplate = document.getElementsByClassName('kursi-cgv-template')
+let kursiTemplate = document.getElementsByClassName('kursi-adminv')
 
 // gabisa pake foreach
 for (let i = 0; i < kursiTemplate.length; i++) {

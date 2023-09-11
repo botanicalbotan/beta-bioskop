@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, BelongsTo, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, BelongsTo, column, hasMany, HasMany, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Template from './Template'
 import Studio from './Studio'
 import Reservasi from './Reservasi'
+import Invoice from './Invoice'
 
 export default class Kursi extends BaseModel {
   @column({ isPrimary: true })
@@ -41,4 +42,24 @@ export default class Kursi extends BaseModel {
   
   @hasMany(() => Reservasi)
   public jadwals: HasMany<typeof Reservasi>
+
+  // jadinya make N-to-N tanpa perantara aja
+  @manyToMany(() => Invoice, {
+    pivotTable: 'invoice_kursis',
+    localKey: 'id',
+    pivotForeignKey: 'kursi_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'invoice_id',
+  })
+  public invoices: ManyToMany<typeof Invoice>
+
+  // jadinya make N-to-N tanpa perantara aja
+  @manyToMany(() => Reservasi, {
+    pivotTable: 'reservasi_kursis',
+    localKey: 'id',
+    pivotForeignKey: 'kursi_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'reservasi_id',
+  })
+  public reservasis: ManyToMany<typeof Reservasi>
 }

@@ -11,7 +11,7 @@
     <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
         <div class="flex-none p-2 flex justify-center">
             <div class="flex items-center justify-center w-28 h-36 bg-slate-500">
-              <span>Foto</span>
+                <span>Foto</span>
             </div>
         </div>
 
@@ -53,22 +53,22 @@
             <div>
                 <div class="flex space-x-2 max-w-xs">
                     <div class="flex-none flex w-32">
-                      <span class="flex-1">Tipe Layar</span>
-                      <span class="flex-none">:</span>
+                        <span class="flex-1">Tipe Layar</span>
+                        <span class="flex-none">:</span>
                     </div>
                     <div class="flex-1">Masih Kosong</div>
-                  </div>
+                </div>
 
-                  <div class="flex space-x-2 max-w-xs">
+                <div class="flex space-x-2 max-w-xs">
                     <div class="flex-none flex w-32">
-                      <span class="flex-1">Tipe Audio</span>
-                      <span class="flex-none">:</span>
+                        <span class="flex-1">Tipe Audio</span>
+                        <span class="flex-none">:</span>
                     </div>
                     <div class="flex-1">Masih Kosong</div>
-                  </div>
+                </div>
             </div>
 
-            {{--  <div>
+            {{-- <div>
                 Sebenernya dari list studio, masuk ke view studio dulu, yang nampilin data2 remeh temeh,
                 sekalian ui buat ngedit data2 studio yang lain, kaya nama, tier dll.
                 Tp welp, lebih penting ini dulu.
@@ -78,23 +78,22 @@
                 mollitia porro sequi libero ipsam accusamus aliquam, sed,
                 ducimus dolores expedita necessitatibus blanditiis repellat
                 nihil totam sunt nisi. Blanditiis, consectetur.
-            </div>  --}}
+            </div> --}}
             <div class="flex space-x-2">
                 {{-- <div class="p-1 border border-gray-500">Tier Studio: {{ studio.tierStudio.nama }}</div> --}}
             </div>
         </div>
 
-        
     </div>
 
     <div class="space-y-4">
-        {{--  <div class="font-semibold text-xl">Editor Layout Studio</div>  --}}
+        {{-- <div class="font-semibold text-xl">Editor Layout Studio</div> --}}
 
-        <div>
-            {{--  keterangan refresh  --}}
+        <div id="data-studio" data-harga="{{ hargaKursi }}">
+            {{-- keterangan refresh --}}
             <div class="flex text-white bg-neutral-700 px-2 py-1">
                 <div class="flex-1 text-sm flex justify-start items-center">
-                    <div>Terakhir diperbarui: <span class="mr-2">tgl refresh</span></div>
+                    <div>Diperbarui: <span class="mr-2">{{ new Date().toLocaleString() }}</span></div>
                 </div>
                 <div class="flex-none font-semibold hidden sm:block">TEMPAT DUDUK</div>
                 <div class="flex-1 text-sm flex justify-end items-center">
@@ -102,49 +101,94 @@
                 </div>
             </div>
 
-            {{--  isi list kursi  --}}
-            <div class="flex flex-col overflow-x-auto items-center justify-center bg-gray-100 p-6">
- 
-                <div class="flex flex-col space-y-1">
-                    @each(col in layoutKursi)
-                      <div class="flex space-x-1">
+            {{-- isi list kursi --}}
+            <form id="formKursi" method="POST" action="/userv/reservasi/baru?jadid={{ jadwal.id }}">
+                <div class="flex flex-col overflow-x-auto items-center justify-center bg-gray-100 p-6">
 
-                        @each(item in col)
+                    <div class="flex flex-col space-y-1">
+                        @each(col in layoutKursi)
+                        <div class="flex space-x-1">
+
+                            @each(item in col)
                             @if(item.isKursi)
-                                <div class="kursi-cgv-template" data-id="{{ item.id }}" data-berubah="0" data-iskursi="{{ item.isKursi }}">{{ item.node }}</div>
+                            {{-- <div class="kursi-userv" data-id="{{ item.id }}" data-berubah="0"
+                                data-iskursi="{{ item.isKursi }}">{{ item.node }}</div> --}}
+                            <div>
+                                <label class="kursi-userv" for="{{ 'cebe'+item.id }}" data-ispilih="0">{{ item.node
+                                    }}</label>
+                                <input type="checkbox" id="{{ 'cebe'+item.id }}" data-label="{{ item.node }}" value="{{ item.id }}" name="dipilih[]"
+                                    class="hidden">
+                            </div>
                             @else
-                                <div class="bukan-kursi"></div>
+                            <div class="bukan-kursi"></div>
                             @endif
+                            @endeach
+
+                        </div>
                         @endeach
 
-                      </div>
-                    @endeach
+                        <div>
+                            <div
+                                class="mt-4 flex items-center justify-center border-2 p-0.5 text-xs text-white bg-slate-600">
+                                Layar
+                            </div>
+                        </div>
 
-                    <div>
-                        <div class="mt-4 flex items-center justify-center border-2 p-0.5 text-xs text-white bg-slate-600">
-                            Layar
+                        <div>
+                            <div class="mt-6 flex space-x-3 items-center justify-center">
+                                <div class=" flex">
+                                    <div class="kursi-userv selected mr-2"></div>
+                                    <div>Dipilih</div>
+                                </div>
+                                <div class=" flex">
+                                    <div class="kursi-userv mr-2"></div>
+                                    <div>Tersedia</div>
+                                </div>
+                                <div class="flex">
+                                    <div class="kursi-userv mr-2 terisi"></div>
+                                    <div>Terisi</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </form>
+        </div>
+    </div>
 
-                
+    @if(flashMessages.has('alertError'))
+    <div class="px-4 text-center text-red-500">
+        {{ flashMessages.get('alertError') }}
+    </div>
+    @endif
 
-                
-                {{-- <div class="flex-none lg:w-1/3 space-y-3">
-                    <div class="text-lg">1 Kursi Terpilih</div>
-                    <div>
-                        <div class="font-bold">A2</div>
-                        <div class="">Rp. 10.000</div>
+    <div class="flex items-center justify-center">
+        <div class="w-full lg:w-1/2 p-4 flex flex-col lg:flex-row lg:space-x-4 border-2 space-y-2 lg:space-y-0">
+            <div class="flex-1 p-2 space-y-2">
+                <div class="font-semibold">
+                    <span id="jumlahKursi">0</span> Tiket
+                </div>
+                <div>
+                    <div>Nomor kursi</div>
+                    <div class="font-semibold" id="wadahKursi">
+                        -
                     </div>
-                    <div>
-                        <div
-                            class="px-2 py-1 bg-yellow-300 cursor-pointer rounded items-center text-center hover:bg-yellow-400">
-                            Pesan Kursi</div>
-                    </div>
-                </div> --}}
+                </div>
+            </div>
+
+            <div class="flex-none hidden lg:block border-l-2"></div>
+
+            <div class="lg:w-1/3 space-y-4 p-2">
+                <div class="text-center">
+                    <div>Total</div>
+                    <div class="text-2xl" id="totalHarga">Rp 0</div>
+                </div>
+                <button id="btSubmit" disabled
+                    class="block px-2 py-1 w-full bg-yellow-300 cursor-pointer rounded items-center text-center hover:bg-yellow-400 disabled:bg-gray-400">Lanjutkan</button>
             </div>
         </div>
     </div>
+
 </div>
 @endsection
 

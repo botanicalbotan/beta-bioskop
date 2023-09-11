@@ -20,32 +20,12 @@ bikinFilmRandom.addEventListener('click', () => {
         })
         .then((res) => {
             alert('Berhasil bro!')
-                console.log(response)
-                window.location.reload()
+            window.location.reload()
         })
         .catch((err) => {
             alert('Gagal bro, ada error')
-            console.log(err.response)
+            console.log(err)
         })
-
-        // $.ajax({
-        //     type: "POST",
-        //     url: '/adminv/films/baru',
-        //     data: {
-        //         nama: namaFilm
-        //     },
-        //     dataType: "json",
-        //     success: function (response) {
-        //         alert('Berhasil bro!')
-        //         console.log(response)
-        //         window.location.reload()
-        //     },
-        //     error: function (err) {
-        //         alert('Gagal bro, ada error')
-        //         console.log(err)
-        //     }
-
-        // });
     }
 })
 

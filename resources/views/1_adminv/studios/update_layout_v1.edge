@@ -28,7 +28,7 @@
                 <div class="flex space-x-1">
 
                     @each(item in col)
-                    <div class="kursi-cgv-template {{ (item.isKursi)? '': 'bukan-kursi' }}" data-id="{{ item.id }}"
+                    <div class="kursi-adminv {{ (item.isKursi)? '': 'bukan-kursi' }}" data-id="{{ item.id }}"
                         data-berubah="0" data-iskursi="{{ item.isKursi }}">{{ item.node }}</div>
 
                     @endeach

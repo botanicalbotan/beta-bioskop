@@ -6,7 +6,7 @@ import { kapitalKalimat } from 'App/customFunction'
 import { DateTime } from 'luxon';
 
 
-function generateOrang(max: number = 2) {
+function generateOrangFilm(max: number = 2) {
     let gachaTotal = Math.floor(Math.random() * max) + 1
 
     let wadah = ''
@@ -89,8 +89,9 @@ export default class FilmsController {
 
             let gachaRating = Math.floor(Math.random() * (ratings.length))
 
-            let directors = generateOrang(2).substring(0, 255)
-            let starrings = generateOrang(4).substring(0, 255)
+            let directors = generateOrangFilm(2).substring(0, 255)
+            let starrings = generateOrangFilm(4).substring(0, 255)
+            // gacha max 160 menitan
             let gachaDurasi = 60 + (Math.floor(Math.random() * 10) * 10) + Math.floor(Math.random() * 10)
 
             await Film.create({

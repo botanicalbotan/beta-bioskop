@@ -159,7 +159,7 @@ const epenNode = function (e) {
     })
 }
 
-const semuaNode = document.getElementsByClassName('kursi-cgv-template')
+const semuaNode = document.getElementsByClassName('kursi-adminv')
 
 // gabisa pake foreach
 for (let i = 0; i < semuaNode.length; i++) {
