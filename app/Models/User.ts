@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Reservasi from './Reservasi'
-import Invoice from './Invoice'
+import Kuncikur from './Kuncikur'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -19,6 +19,6 @@ export default class User extends BaseModel {
   @hasMany(() => Reservasi)
   public jadwals: HasMany<typeof Reservasi>
 
-  @hasMany(() => Invoice)
-  public invoices: HasMany<typeof Invoice>
+  @hasMany(() => Kuncikur)
+  public kuncikurs: HasMany<typeof Kuncikur>
 }

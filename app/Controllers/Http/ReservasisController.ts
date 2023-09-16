@@ -4,9 +4,13 @@ import Jadwal from 'App/Models/Jadwal'
 import { DateTime } from 'luxon'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import RawData from 'App/Asli/raw_data'
-import Invoice from 'App/Models/Invoice'
+import Kuncikur from 'App/Models/Kuncikur'
 import User from 'App/Models/User'
-import Kursi from 'App/Models/Kursi'
+// import Kursi from 'App/Models/Kursi'
+import { checkAndGetKupon } from 'App/Asli/lib_fungsi'
+import Reservasi from 'App/Models/Reservasi'
+import VaBankDebit from 'App/Models/VaBankDebit'
+import { faker } from '@faker-js/faker'
 
 export default class ReservasisController {
     public async listReservasi({ }: HttpContextContract) {
@@ -21,7 +25,7 @@ export default class ReservasisController {
         }
     }
 
-    public async reservasiBaru({ view, request }: HttpContextContract) {
+    public async pilihKursi({ view, request }: HttpContextContract) {
         // data tanggal, studio sama film udah ada di tanggal
         let jadwalId = request.input('jadid')
 
@@ -53,6 +57,27 @@ export default class ReservasisController {
                     'templates.row as row'
                     // segini dulu
                 )
+                .select(
+                    // ngecek kuncikur aktif
+                    Database.from('kuncikur_kursis')
+                        .join('kuncikurs', 'kuncikur_kursis.kuncikur_id', 'kuncikurs.id')
+                        .select('kuncikurs.id')
+                        .whereColumn('kuncikur_kursis.kursi_id', 'kursis.id')
+                        .andWhere('kuncikurs.lock_until', '>=', DateTime.now().toSQL() as string)
+                        .limit(1)
+                        .as('kuncikurAktifId')
+                )
+                .select(
+                    // ngecek reservasi aktif, entah yang udah dibayar atau belum, yang penting valid
+                    Database.from('reservasi_kursis')
+                        .join('reservasis', 'reservasi_kursis.reservasi_id', 'reservasis.id')
+                        .select('reservasis.id')
+                        .whereColumn('reservasi_kursis.kursi_id', 'kursis.id')
+                        .andWhere('reservasis.lock_until', '>=', DateTime.now().toSQL() as string) // cek lock
+                        .andWhere('reservasis.is_active', true) // cek aktif, ntar ada mekanisme cron buat ngecek status tiap 10 menit
+                        .limit(1)
+                        .as('reservasiAktifId')
+                )
                 .orderBy('templates.col', 'asc')
                 .orderBy('templates.row', 'asc')
 
@@ -79,187 +104,151 @@ export default class ReservasisController {
         }
     }
 
-    public async buatInvoice({ request, response, session, auth }: HttpContextContract) {
-        const jadwalId = request.input('jadid')
-        // waktu tunggu ampe kursi dilepas lagi
-        const waktuHoldMenit = RawData.holdInvoiceMinute
+    // DISINI MULAI VALIDASI BIKIN RESERVASI BARU
+    public async buatReservasiDebit({ request, params, response, auth, session }: HttpContextContract) {
+        const kuncikurId = params.kuncikurid
 
         try {
             // ------------ PENGAKSES ------------------
             if (!auth.user) throw 'auth ngga valid'
             const userPengakses = await User.findOrFail(auth.user.id)
 
-            const jadwalTarget = await Jadwal.findOrFail(jadwalId)
+            // ------------ CEK PARAM -----------------
+            const targetKuncikur = await Kuncikur.findOrFail(kuncikurId)
                 .catch(() => {
-                    throw new Error('Jadwal idnya ga valid bro')
+                    throw new Error('Waduh url lu ngaco bro')
                 })
+            await targetKuncikur.load('kursis')
+            await targetKuncikur.load('jadwal')
 
-            await jadwalTarget.load('studio', (studio) => {
-                studio.preload('tierStudio')
-            })
+            // ---------- CEK WAKTU LOCK --------------
+            if(targetKuncikur.lockUntil < DateTime.now()) {
+                throw new Error('Lah, udah ngga valid brooo')
+            }
 
-            // ------------ CEK KURSI ------------------
-            const newInvoiceSchema = schema.create({
-                dipilih: schema.array([
-                    rules.minLength(1),
-                    // kalau mau, dikasi maxlength banyak kursi yang belom diambil di jadwal ini
-                ]).members(
-                    schema.string([
-                        rules.exists({
-                            table: 'kursis',
-                            column: 'priv_id',
-                            where: {
-                                studio_id: jadwalTarget.studio.id
-                            }
-                        })
-                    ])
-                )
+            // ---------- CEK FILM SELESAI -------------
+            if(targetKuncikur.jadwal.filmSelesai < DateTime.now()){
+                throw new Error('Lah filmnya udah kelar broooo')
+            }
+
+            // --------- CEK INPUT ---------------------
+            // yang perlu dicek:  1.data debit, 2.data kupon (idnya aja)
+            let newReservasiDebitSchema = schema.create({
+                vaDebit: schema.number([
+                    rules.exists({
+                        table: 'va_bank_debits',
+                        column: 'id'
+                    })
+                ]),
+                kuponValidDebit: schema.string.optional([
+                    // redundan sih, tp biar gampang, ntar ngecek kuponnya dibawah
+                    rules.exists({
+                        table: 'kupons',
+                        column: 'kode',
+                    })
+                ]),
             })
 
             const validrequest = await request.validate({
-                schema: newInvoiceSchema,
+                schema: newReservasiDebitSchema,
                 messages: {
-                    '*': 'Data yang lu kirim ngga valid bro, benerin gih'
+                    '*': 'Lah input lu salah brooo'
                 }
             })
 
-            // ------------ CEK KURSI LAGI GA DI HOLD ------------------
-            for (const iterator of validrequest.dipilih) {
-                const testKursi = await Database
-                    .from('kursis')
-                    .join('invoice_kursis', 'invoice_kursis.kursi_id', 'kursis.id') // kalau ada, berarti kehold
-                    .join('invoices', 'invoice_kursis.invoice_id', 'invoices.id')
-                    .join('jadwals', 'jadwals.studio_id', 'kursis.studio_id')
-                    .select('kursis.id as idKursi')
-                    .where('jadwals.id', jadwalId) // cek jadwal
-                    .andWhereRaw('invoices.lock_until > ?', [DateTime.now().toSQL() as string]) // cek waktu lock
-                    .andWhere('kursis.priv_id', iterator) // cek kursi
-                    .first()
+            // --------- CEK KUPON ----------------
+            const kuponTarget = (validrequest.kuponValidDebit) ? await checkAndGetKupon(validrequest.kuponValidDebit) : null
 
-                    console.log(testKursi)
-                if(testKursi){
-                    throw new Error('Ada kursi yang ke hold! :' + iterator)
-                }
+            // hitung harga barang
+            let diskon = 0
+            if (kuponTarget) {
+                diskon = (kuponTarget.isPersen) ? kuponTarget.nominal / 100 * targetKuncikur.hargaLock : kuponTarget.nominal
             }
+            const dataOngkos = RawData.ongkosPembayaran.debit_transfer // masih hardcoded
+            let ongkos = (dataOngkos.isPersen) ? dataOngkos.nominal / 100 * targetKuncikur.hargaLock : dataOngkos.nominal
 
-            // Mulai compile harga disini
-            let hargaKursi = jadwalTarget.studio.tierStudio.hargaReguler
-            const sekarang = DateTime.now()
+            let hargaTiket = targetKuncikur.hargaLock - diskon + ongkos
 
-            if (sekarang.weekday == 5) {
-                // kalau jumat
-                hargaKursi = jadwalTarget.studio.tierStudio.hargaFriday
-            } else if (sekarang.weekday >= 6) {
-                // kalau weekend
-                hargaKursi = jadwalTarget.studio.tierStudio.hargaWeekend
-            }
+            // --------- AMBIL VA ----------------
+            const targetVA = await VaBankDebit.findOrFail(validrequest.vaDebit)
 
-            // bikin invoice baru
-            const invoiceBaru = await Invoice.create({
-                hargaLock: hargaKursi,
-                lockUntil: sekarang.plus({ minutes: waktuHoldMenit }),
-                jadwalId: jadwalId,
+            const reservasiBaru = await Reservasi.create({
+                hargaTiketBase: targetKuncikur.hargaLock, // harga semua tiket
+                hargaTiketAkhir: hargaTiket, // harga semua tiket
+                ongkosLayanan: ongkos,
+                lockUntil: targetKuncikur.lockUntil,
+                isActive: true,
+                isPaid: false,
+                metodeBayar: `Debit-${targetVA.nama}`,
+                noTransaksi: faker.string.numeric({ length: 12 }),
+                noVa: targetVA.noVa.toString() + faker.string.numeric(5),
+                redeemToken: faker.string.nanoid(20), // apa baru dikasi pas lunas?
+                isUsed: false,
                 userId: userPengakses.id,
+                jadwalId: targetKuncikur.jadwalId
             })
 
-            // attach kursi ke invoice
-            for (const iterator of validrequest.dipilih) {
+            // --------- COPY SEMUA KURSI ----------
+            for (const kursi of targetKuncikur.kursis) {
                 try {
-                    const kursi = await Kursi.findByOrFail('priv_id', iterator)
-                        .catch(() => {
-                            throw new Error('ada skip')
-                        })
-
-                    await invoiceBaru.related('kursis').attach([kursi.id])
+                    await reservasiBaru.related('kursis').attach([kursi.id])
                 } catch (error) {
-                    console.log(error.message)
+                    console.log(error)
                 }
             }
 
-            // kalau kelar, redirect ke laman invoice
-            // return response.redirect().status(301).toPath(`/userv/reservasi/checkout/${invoiceBaru.id}`)
+            // --------- KUPON LAGIIIII -----------
+            if (kuponTarget) {
+                reservasiBaru.related('kupons').attach([kuponTarget.id])
+            }
+
+
+            // set kuncikur ke kelar
+            targetKuncikur.lockUntil = DateTime.now().minus({ minute: 1 }) // whynot
+            await targetKuncikur.save()
+
+            // kalau kelar, redirect ke laman baru
+            // return response.redirect().status(301).toPath('')
 
             return {
-                msg: 'Kelar cuy'
+                msg: 'Anjay kelar lu'
             }
         } catch (error) {
             console.log(error.message)
 
             session.flash(
                 'alertError',
-                'Kursi yang anda pesan tidak valid. Mohon hanya pilih kursi yang tersedia!'
+                error.message
             )
             return response.redirect().withQs().back()
         }
     }
 
-    public async listInvoice({ }: HttpContextContract) {
+    public async buatReservasiBBPoint({ }: HttpContextContract) {
+        // to do...
+    }
+
+    public async buatReservasiKartuKredit({ }: HttpContextContract) {
+        // to do...
+    }
+
+    public async buatReservasiLainnya({ }: HttpContextContract) {
+        // to do...
+    }
+
+
+    // DISINI SELESAI VALIDASINYA
+
+
+    public async lihatPembayaranReservasi({ }: HttpContextContract) {
         return {
-            msg: "Masih kosong bro"
+            msg: 'ini laman pembayaran, mamamia'
         }
     }
 
-    public async lihatInvoice({ view, params }: HttpContextContract) {
-        // data tanggal, studio sama film udah ada di tanggal
-        let invoiceId = params.invoiceid
-        try {
-            // ambil dan cocokin semua data tanggal
-            let invoice = await Invoice.findOrFail(invoiceId)
-            .catch(() => {
-                throw new Error('Waduh, kok id invoicenya ngaco bro')
-            })
+    // kalau lanjut nyimpen kuncikur jadi reservasi
+    public async simpanPembayaranReservasi({ }: HttpContextContract) {
 
-            // ngambil data jadwal ma film
-            await invoice.load('jadwal', (jadwal) => {
-                jadwal.preload('film')
-                    .preload('studio', (studio) => {
-                        studio.preload('tierStudio')
-                    })  
-            })
-
-            await invoice.load('kursis')
-            
-            let listKursi = ''
-            for (let i = 0; i < invoice.kursis.length; i++) {
-                listKursi += invoice.kursis[i].pubId
-
-                if(i < invoice.kursis.length - 1) {
-                    listKursi += ', '
-                }
-            }
-
-            return view.render('2_userv/reservasi/checkout_invoice', { invoice, fungsi: { rupiahParser }, listKursi })
-            
-        } catch (error) {
-            return {
-                msg: 'waduh',
-                error: error.message
-            }
-        }
-    }
-
-    public async lamanBayarInvoice({ }: HttpContextContract) {
-
-    }
-
-    public async bayarInvoice({ }: HttpContextContract) {
-
-    }
-
-    public async batalInvoice({ }: HttpContextContract) {
-
-    }
-
-    public async getInvoiceAPI({ }: HttpContextContract) {
-        return {
-            msg: "Masih kosong bro"
-        }
-    }
-
-    public async getInvoiceCountAPI({ }: HttpContextContract) {
-        return {
-            msg: "Masih kosong bro"
-        }
     }
 }
 
@@ -288,13 +277,3 @@ function templateToGridBeta(hasil: DbTemplateBeta[], maxCol: number) {
 
     return wadah
 }
-
-function rupiahParser(angka: number) {
-    if (typeof angka == 'number') {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-      }).format(angka)
-    } else return 'error'
-  }

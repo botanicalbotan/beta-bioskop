@@ -122,9 +122,9 @@
         <div class="flex flex-wrap space-x-2">
           @if(film.jadwals.length > 0)
             @each(item in film.jadwals)
-            @if(item.isPenuh)
+            @if(item.isPenuh || item.isKelar)
               <div class="px-3 py-2 text-black bg-gray-500 cursor-not-allowed">
-                {{ item.mulaiTayang }}
+                {{ new Date(item.mulaiTayang).toLocaleTimeString('id-ID', { hour:'2-digit', minute: '2-digit'}) }}
               </div>
             @else
             <a href="/userv/reservasi/baru?jadid={{ item.id }}" class="px-3 py-2 text-white bg-slate-900">

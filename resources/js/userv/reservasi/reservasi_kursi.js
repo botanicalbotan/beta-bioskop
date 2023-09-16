@@ -21,11 +21,11 @@ function pilihKursi(event) {
     if (currentStat && currentStat == '0') {
         event.currentTarget.classList.add('selected')
         event.currentTarget.dataset.ispilih = 1
-        console.log('klik 1')
+        // console.log('klik 1')
     } else {
         event.currentTarget.classList.remove('selected')
         event.currentTarget.dataset.ispilih = 0
-        console.log('klik 2')
+        // console.log('klik 2')
     }
 
     // masa gini sih anz, telat soalnya epennya

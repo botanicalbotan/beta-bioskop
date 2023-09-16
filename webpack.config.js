@@ -53,8 +53,10 @@ Encore.addEntry('u_bioskop', './resources/js/userv/bioskop.js')
 Encore.addEntry('u_home', './resources/js/userv/home.js')
 Encore.addEntry('u_reservasi_kursi', './resources/js/userv/reservasi/reservasi_kursi.js')
 Encore.addEntry('u_list_reservasi', './resources/js/userv/reservasi/list_reservasi.js')
-Encore.addEntry('u_checkout_invoice', './resources/js/userv/reservasi/checkout_invoice.js')
+Encore.addEntry('u_checkout_metode', './resources/js/userv/reservasi/checkout_metode.js')
 Encore.addEntry('u_checkout_pembayaran', './resources/js/userv/reservasi/checkout_pembayaran.js')
+
+Encore.addEntry('u_tiket_aing', './resources/js/userv/tiket_aing/list_tiket_aing.js')
 
 
 Encore.addEntry('list_film', './resources/js/adminv/films/list_film.js')

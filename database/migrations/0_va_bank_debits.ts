@@ -1,15 +1,15 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'invoice_kursis'
-  // INI JADI TABEL N-TO-N INVOICE ke Kursi
+  protected tableName = 'va_bank_debits'
+  // INI SEMENTARA
+  // gambaran kedepannya cek discord
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-
-      table.integer('invoice_id').unsigned().references('invoices.id').notNullable()
-      table.integer('kursi_id').unsigned().references('kursis.id').notNullable()
+      table.string('nama', 50).notNullable()
+      table.string('no_va', 50).notNullable()
     })
   }
 

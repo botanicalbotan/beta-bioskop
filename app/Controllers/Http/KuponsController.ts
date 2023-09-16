@@ -1,7 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
-import Kupon from 'App/Models/Kupon'
+// import Kupon from 'App/Models/Kupon'
 import { DateTime } from 'luxon'
+import { checkAndGetKupon } from 'App/Asli/lib_fungsi'
 
 export default class KuponsController {
     public async listKupon({ view, request }: HttpContextContract) {
@@ -43,28 +44,30 @@ export default class KuponsController {
         let kodeKupon = request.input('kuponid', 'gaboleh default kosong') // soalnya kodenya bisa kosong
 
         try {
-            const kuponTarget = await Kupon.findByOrFail('kode', kodeKupon)
-                .catch(() => {
-                    throw new Error('Kode kupon ngga valid broooo')
-                })
+            // const kuponTarget = await Kupon.findByOrFail('kode', kodeKupon)
+            //     .catch(() => {
+            //         throw new Error('Kode kupon ngga valid broooo')
+            //     })
 
-            if (!kuponTarget.isValid) {
-                throw new Error('Kode kupon ngga valid broooo (2)')
-            }
+            // if (!kuponTarget.isValid) {
+            //     throw new Error('Kode kupon ngga valid broooo (2)')
+            // }
 
-            if(DateTime.now() > kuponTarget.expiredAt){
-                throw new Error('Kupon udah expired broooo')
-            }
+            // if (DateTime.now() > kuponTarget.expiredAt) {
+            //     throw new Error('Kupon udah expired broooo')
+            // }
 
-            if (kuponTarget.jumlahRedeem + 1 > kuponTarget.maxRedeem) {
-                throw new Error('Kupon udah abis brooo')
-            }
+            // if (kuponTarget.jumlahRedeem + 1 > kuponTarget.maxRedeem) {
+            //     throw new Error('Kupon udah abis brooo')
+            // }
 
+            const kuponTarget = await checkAndGetKupon(kodeKupon)
 
             // kalau lolos semua....
             return {
                 isPersen: kuponTarget.isPersen,
-                nominal: kuponTarget.nominal
+                nominal: kuponTarget.nominal,
+                nama: kuponTarget.nama
             }
 
         } catch (error) {

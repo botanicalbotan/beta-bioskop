@@ -150,55 +150,14 @@ btCariSlot.addEventListener('click', (e) => {
             console.log(err)
             Swal.fire({
               icon: 'error',
-              title: 'Terdapat error dari server!',
+              title: err.response.data.msg,
               scrollbarPadding: false,
-              text: err.response.data.msg,
+              text: 'Ini error dari server bro',
               confirmButtonText: 'Tutup'
             })
 
             resetSlot()
           })
-
-        // $.get("/adminv/jadwals/cari_slot", {
-        //   iTanggalTayang: tempTanggal,
-        //   iStudio: tempStudio
-        // },
-        //   function (data, textStatus, jqXH54R) {
-        //     // cek data beneran ada
-        //     if (data.filmsByTanggal && data.filmsByTanggal.length > 0) {
-        //       wadahFilm = data.filmsByTanggal
-        //       setIsiFilm(data.filmsByTanggal)
-        //       updateKeteranganFilmById(data.filmsByTanggal[0].id)
-        //       IDFILM = data.filmsByTanggal[0].id
-        //       DURASI = data.filmsByTanggal[0].durasi
-        //     }
-
-        //     updateJadwalAktif(data.jadwalsAktif)
-
-        //     // set studio ID sama waktu tayang
-        //     IDSTUDIO = tempStudio
-        //     ISO_TANGGALTAYANG = tempTanggal
-        //     TANGGALTAYANG = DateTime.fromISO(tempTanggal)
-
-        //     lbTanggalTayang.textContent = DateTime.fromISO(tempTanggal).toFormat('dd LLLL yyyy', { locale: 'id-ID' })
-        //     lbNamaStudio.textContent = tempStudio
-        //     Swal.close()
-
-        //     mainForm.classList.remove('hidden')
-        //   },
-        //   "json"
-        // ).catch((xhr) => {
-        //   console.log(xhr)
-        //   Swal.fire({
-        //     icon: 'error',
-        //     title: 'Terdapat error dari server!',
-        //     scrollbarPadding: false,
-        //     text: xhr.responseJSON.msg,
-        //     confirmButtonText: 'Tutup'
-        //   })
-
-        //   resetSlot()
-        // })
       }, 1000)
     }
   })
@@ -405,9 +364,9 @@ btKirim.addEventListener('click', () => {
           .catch((err) => {
             Swal.fire({
               icon: 'error',
-              title: 'Terdapat error dari server!',
+              title: err.response.data.msg,
               scrollbarPadding: false,
-              text: err.response.data.msg,
+              text: 'Ini error dari server bro.',
               confirmButtonText: 'Tutup'
             }).then(() => {
               // cek tabrakan disini
@@ -417,35 +376,6 @@ btKirim.addEventListener('click', () => {
               }
             })
           })
-
-          // $.post(window.location.pathname, {
-          //   mulaiTayang: ISO_WAKTUTAYANG,
-          //   filmId: IDFILM,
-          //   studioId: IDSTUDIO
-          // },
-          //   function (data, textStatus, jqXH54R) {
-          //     // cek data beneran ada
-          //     Swal.fire('WEYYYYYY', 'INPUT BERHASIL BRO', 'success').then(() => {
-          //       window.location.reload()
-          //     })
-
-          //   },
-          //   "json"
-          // ).catch((xhr) => {
-          //   Swal.fire({
-          //     icon: 'error',
-          //     title: 'Terdapat error dari server!',
-          //     scrollbarPadding: false,
-          //     text: xhr.responseJSON.msg,
-          //     confirmButtonText: 'Tutup'
-          //   }).then(() => {
-          //     // cek tabrakan disini
-
-          //     if (xhr.responseJSON.idTabrak && (xhr.responseJSON.isTabrakAtas || xhr.responseJSON.isTabrakBawah)) {
-          //       tandainTabrakan(xhr.responseJSON.idTabrak)
-          //     }
-          //   })
-          // })
 
         }, 1000)
       }

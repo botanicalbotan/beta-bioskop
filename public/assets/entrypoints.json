@@ -41,14 +41,19 @@
         "http://localhost:8080/assets/u_list_reservasi.js"
       ]
     },
-    "u_checkout_invoice": {
+    "u_checkout_metode": {
       "js": [
-        "http://localhost:8080/assets/u_checkout_invoice.js"
+        "http://localhost:8080/assets/u_checkout_metode.js"
       ]
     },
     "u_checkout_pembayaran": {
       "js": [
         "http://localhost:8080/assets/u_checkout_pembayaran.js"
+      ]
+    },
+    "u_tiket_aing": {
+      "js": [
+        "http://localhost:8080/assets/u_tiket_aing.js"
       ]
     },
     "list_film": {

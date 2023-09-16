@@ -4,7 +4,7 @@ import Kursi from './Kursi'
 import User from './User'
 import Jadwal from './Jadwal'
 
-export default class Invoice extends BaseModel {
+export default class Kuncikur extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -34,9 +34,9 @@ export default class Invoice extends BaseModel {
 
    // jadinya make N-to-N tanpa perantara aja
    @manyToMany(() => Kursi, {
-    pivotTable: 'invoice_kursis',
+    pivotTable: 'kuncikur_kursis',
     localKey: 'id',
-    pivotForeignKey: 'invoice_id',
+    pivotForeignKey: 'kuncikur_id',
     relatedKey: 'id',
     pivotRelatedForeignKey: 'kursi_id',
   })

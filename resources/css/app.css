@@ -78,8 +78,8 @@
     @apply bg-blue-600
   }
 
-  .kursi-userv.terisi {
-    @apply bg-gray-400
+  .kursi-userv-terisi {
+    @apply kursi-userv bg-gray-400 cursor-default
   }
 
   /* .kursi-adminv.bukan-kursi.selection{

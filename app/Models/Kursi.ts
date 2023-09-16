@@ -3,7 +3,7 @@ import { BaseModel, belongsTo, BelongsTo, column, hasMany, HasMany, manyToMany, 
 import Template from './Template'
 import Studio from './Studio'
 import Reservasi from './Reservasi'
-import Invoice from './Invoice'
+import Kuncikur from './Kuncikur'
 
 export default class Kursi extends BaseModel {
   @column({ isPrimary: true })
@@ -44,14 +44,14 @@ export default class Kursi extends BaseModel {
   public jadwals: HasMany<typeof Reservasi>
 
   // jadinya make N-to-N tanpa perantara aja
-  @manyToMany(() => Invoice, {
-    pivotTable: 'invoice_kursis',
+  @manyToMany(() => Kuncikur, {
+    pivotTable: 'kuncikur_kursis',
     localKey: 'id',
     pivotForeignKey: 'kursi_id',
     relatedKey: 'id',
-    pivotRelatedForeignKey: 'invoice_id',
+    pivotRelatedForeignKey: 'kuncikur_id',
   })
-  public invoices: ManyToMany<typeof Invoice>
+  public kuncikurs: ManyToMany<typeof Kuncikur>
 
   // jadinya make N-to-N tanpa perantara aja
   @manyToMany(() => Reservasi, {

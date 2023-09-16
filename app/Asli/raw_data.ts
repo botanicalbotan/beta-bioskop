@@ -34,7 +34,7 @@ const _ = {
     maxCol: 10,
     minRow: 1,
     maxRow: 30,
-    holdInvoiceMinute: 10, // menit invoice ampe kursi dilepas lagi,
+    holdKuncikurMinute: 10, // menit kuncikur ampe kursi dilepas lagi,
     ongkosPembayaran
 }
 

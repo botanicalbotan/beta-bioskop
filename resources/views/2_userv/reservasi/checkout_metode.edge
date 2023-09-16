@@ -17,7 +17,7 @@
 
         <div class="flex-1 space-y-4">
             {{-- kotak film --}}
-            <div class="text-2xl font-semibold" id="tes">{{ invoice.jadwal.film.nama }}</div>
+            <div class="text-2xl font-semibold" id="tes">{{ kuncikur.jadwal.film.nama }}</div>
 
             <div class="mb-4 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
                 <div class="flex items-center">
@@ -37,7 +37,7 @@
                             d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z">
                         </path>
                     </svg>
-                    <span class="ml-1">{{ invoice.jadwal.filmMulai.toFormat('ff') }}</span>
+                    <span class="ml-1">{{ kuncikur.jadwal.filmMulai.toFormat('ff') }}</span>
                 </div>
                 <div class="flex items-center">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
@@ -46,7 +46,7 @@
                             d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z">
                         </path>
                     </svg>
-                    <span class="ml-1">Studio {{ invoice.jadwal.studio.nama }}</span>
+                    <span class="ml-1">Studio {{ kuncikur.jadwal.studio.nama }}</span>
                 </div>
             </div>
 
@@ -78,8 +78,8 @@
     <div class="space-y-4">
         {{-- <div class="font-semibold text-xl">Editor Layout Studio</div> --}}
 
-        <div id="data-simpanan" data-harga="{{ invoice.hargaLock }}" data-lock="{{ invoice.lockUntil }}"
-            data-banyak="{{ invoice.kursis.length }}">
+        <div id="data-simpanan" data-harga="{{ kuncikur.hargaLock }}" data-lock="{{ kuncikur.lockUntil }}"
+            data-banyak="{{ kuncikur.kursis.length }}">
             {{-- keterangan refresh --}}
             <div class="flex text-white bg-neutral-700 px-2 py-1">
                 <div class="flex-1 text-sm flex justify-start items-center">
@@ -115,19 +115,19 @@
                             </div>
                         </div>
 
-                        <div id="wadahKupon" class="flex flex-row p-4 bg-yellow-100">
+                        <div id="wadahKupon" class="hidden flex flex-row p-4 bg-yellow-100">
                             <div class="flex-1 text-sm">
                                 <div id="judulKupon" class="font-semibold">Judul Kupon</div>
                                 <div id="keteranganKupon">Keterangan Kupon</div>
                             </div>
-                            <div id="hapusKupon"
+                            <button type="button" id="btHapusKupon"
                                 class="flex-none flex text-yellow-600 hover:text-yellow-700 items-center justify-center">
                                 <svg fill="none" class="w-5 h-5" stroke="currentColor" stroke-width="1.5"
                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12">
                                     </path>
                                 </svg>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
@@ -140,17 +140,17 @@
                         <ul class="mb-5 flex list-none flex-col flex-wrap pl-0 md:flex-row" id="pills-tab"
                             role="tablist" data-te-nav-ref>
                             <li role="presentation">
-                                <a href="#pills-bbpoint"
-                                    class="my-2 block rounded bg-yellow-200 px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight  text-yellow-600 data-[te-nav-active]:!bg-yellow-300 data-[te-nav-active]:text-yellow-700 md:mr-4"
-                                    id="pills-bbpoint-tab" data-te-toggle="pill" data-te-target="#pills-bbpoint"
-                                    data-te-nav-active role="tab" aria-controls="pills-bbpoint" aria-selected="true">BB
-                                    Point</a>
-                            </li>
-                            <li role="presentation">
                                 <a href="#pills-debit"
                                     class="my-2 block rounded bg-yellow-200 px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight  text-yellow-600 data-[te-nav-active]:!bg-yellow-300 data-[te-nav-active]:text-yellow-700 md:mr-4""
                                     id="pills-debit-tab" data-te-toggle="pill" data-te-target="#pills-debit"
-                                    role="tab" aria-controls="pills-debit" aria-selected="false">Debit Transfer</a>
+                                    role="tab" data-te-nav-active aria-controls="pills-debit" aria-selected="true">Debit Transfer</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#pills-bbpoint"
+                                    class="my-2 block rounded bg-yellow-200 px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight  text-yellow-600 data-[te-nav-active]:!bg-yellow-300 data-[te-nav-active]:text-yellow-700 md:mr-4"
+                                    id="pills-bbpoint-tab" data-te-toggle="pill" data-te-target="#pills-bbpoint"
+                                    role="tab" aria-controls="pills-bbpoint" aria-selected="false">BB
+                                    Point</a>
                             </li>
                             <li role="presentation">
                                 <a href="#pills-kredit"
@@ -170,13 +170,12 @@
                         <!--Pills content-->
                         <div class="mb-6">
                             <div class="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
-                                id="pills-bbpoint" role="tabpanel" aria-labelledby="pills-bbpoint-tab"
-                                data-te-tab-active>
-                                @include('2_userv/reservasi/pills/bb_point')
+                                id="pills-debit" role="tabpanel" aria-labelledby="pills-debit-tab" data-te-tab-active>
+                                @include('2_userv/reservasi/pills/debit_transfer')
                             </div>
                             <div class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
-                                id="pills-debit" role="tabpanel" aria-labelledby="pills-debit-tab">
-                                @include('2_userv/reservasi/pills/debit_transfer')
+                                id="pills-bbpoint" role="tabpanel" aria-labelledby="pills-bbpoint-tab">
+                                @include('2_userv/reservasi/pills/bb_point')
                             </div>
                             <div class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
                                 id="pills-kredit" role="tabpanel" aria-labelledby="pills-kredit-tab">
@@ -188,6 +187,11 @@
                             </div>
                         </div>
 
+                        @if(flashMessages.has('alertError'))
+                        <div class="px-4 text-red-500">
+                            {{ flashMessages.get('alertError') }}
+                        </div>
+                        @endif
                     </div>
                 </div>
 
@@ -197,16 +201,16 @@
                             <div class="font-semibold text-xl mb-4">Detail Pembayaran</div>
                             <div class="p-2 border-2 flex space-x-2">
                                 <div class="w-1/4 flex text-3xl font-semibold items-center justify-center bg-gray-200">
-                                    <span class="">{{ invoice.kursis.length }}</span>
+                                    <span class="">{{ kuncikur.kursis.length }}</span>
                                     <span>x</span>
                                 </div>
                                 <div class="border-r-2 border-dashed"></div>
                                 <div class="flex-1 bg-yellow-200 p-4">
                                     <div class="text-sm font-semibold">
-                                        Tiket {{ sentenceCase(invoice.jadwal.studio.tierStudio.nama)}}
+                                        Tiket {{ sentenceCase(kuncikur.jadwal.studio.tierStudio.nama)}}
                                     </div>
                                     <div class="text-lg">
-                                        {{ fungsi.rupiahParser(invoice.hargaLock) }}
+                                        {{ fungsi.rupiahParser(kuncikur.hargaLock) }}
                                     </div>
                                 </div>
                             </div>
@@ -226,10 +230,10 @@
                                 <div class="border-b-2 p-4">
                                     <div class="font-semibold">Sub Total</div>
                                     <div class="flex space-x-2">
-                                        <div class="flex-1">{{ invoice.kursis.length + ' x ' +
-                                            fungsi.rupiahParser(invoice.hargaLock) }}</div>
-                                        <div class="flex-none">{{ fungsi.rupiahParser(invoice.hargaLock *
-                                            invoice.kursis.length) }}</div>
+                                        <div class="flex-1">{{ kuncikur.kursis.length + ' x ' +
+                                            fungsi.rupiahParser(kuncikur.hargaLock) }}</div>
+                                        <div class="flex-none">{{ fungsi.rupiahParser(kuncikur.hargaLock *
+                                            kuncikur.kursis.length) }}</div>
                                     </div>
                                 </div>
 
@@ -258,13 +262,13 @@
                             <div class="text-center mb-6">
                                 <div class="text-xl font-semibold">Grand Total</div>
                                 <div id="lbGrandTotal" class="text-4xl font-bold">{{
-                                    fungsi.rupiahParser(invoice.hargaLock * invoice.kursis.length) }}</div>
+                                    fungsi.rupiahParser(kuncikur.hargaLock * kuncikur.kursis.length) }}</div>
                             </div>
 
                             <div class="flex px-4 space-x-4 items-center justify-center">
                                 <button id="btBatal"
                                     class=" px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 w-full lg:w-56">Batal</button>
-                                <button id="btLanjut"
+                                <button id="btLanjut" disabled
                                     class=" px-4 py-2 rounded bg-yellow-300 hover:bg-yellow-400 disabled:bg-gray-300 w-full lg:w-56">Selanjutnya</button>
                             </div>
                         </div>
@@ -274,15 +278,9 @@
         </div>
     </div>
 
-    @if(flashMessages.has('alertError'))
-    <div class="px-4 text-center text-red-500">
-        {{ flashMessages.get('alertError') }}
-    </div>
-    @endif
-
 </div>
 @endsection
 
 @section('script')
-<script src="{{asset('assets/u_checkout_invoice.js')}}"></script>
+<script src="{{asset('assets/u_checkout_metode.js')}}"></script>
 @endsection

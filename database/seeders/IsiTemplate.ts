@@ -13,6 +13,7 @@ import { DateTime } from 'luxon';
 import Film from 'App/Models/Film';
 import Kupon from 'App/Models/Kupon';
 import User from 'App/Models/User';
+import VaBankDebit from 'App/Models/VaBankDebit';
 
 
 // function getNextChar(char: string) {
@@ -27,6 +28,35 @@ async function bikinUser() {
     {
       nama: 'Lengkuas'
     }
+  ])
+}
+
+async function bikinVaBank() {
+  await VaBankDebit.createMany([
+    {
+      nama: 'Bank Rakyat Indonesia',
+      noVa: faker.number.int({ min: 10000000000, max: 99999999999 }).toString()
+    },
+    {
+      nama: 'Bank Permata',
+      noVa: faker.number.int({ min: 10000000000, max: 99999999999 }).toString()
+    },
+    {
+      nama: 'Bank PT. BANK DANAMON INDONESIA, TBK',
+      noVa: faker.number.int({ min: 10000000000, max: 99999999999 }).toString()
+    },
+    {
+      nama: 'Bank PT. BANK CIMB NIAGA, TBK.',
+      noVa: faker.number.int({ min: 10000000000, max: 99999999999 }).toString()
+    },
+    {
+      nama: 'Bank KEB Hana Indonesia',
+      noVa: faker.number.int({ min: 10000000000, max: 99999999999 }).toString()
+    },
+    {
+      nama: 'Bank International Indonesia Maybank',
+      noVa: faker.number.int({ min: 10000000000, max: 99999999999 }).toString()
+    },
   ])
 }
 
@@ -207,7 +237,8 @@ async function bikinFilmRandom(nama: string) {
 // dikasi null, soalnya dari bikinFilmRandom bisa null
 async function bikinJadwalDariFilm(films: Array<Film | null>) {
   // jam 7 pagi besok
-  let startWaktuDum = DateTime.now().plus({ days: 1 }).startOf('day').plus({ hours: 7 })
+  // let startWaktuDum = DateTime.now().plus({ days: 1 }).startOf('day').plus({ hours: 7 })
+  let startWaktuDum = DateTime.now().startOf('day').plus({ hours: 7 }) // sementara sekarang
   let interlude = 30 // menit
 
   // bikin 7 jadwal
@@ -274,6 +305,9 @@ export default class extends BaseSeeder {
     // ----- bikin user ------
     await bikinUser()
 
+    // ----- bikin va bank -----
+    await bikinVaBank()
+
     // ----- bikin tier studio -----
     let tierDefault = await bikinTier()
 
@@ -303,6 +337,7 @@ export default class extends BaseSeeder {
     await bikinStudio('Basiclah', 8, 20, tierDefault)
     await bikinStudio('Minini', 5, 10, tierDefault)
     await bikinStudio('Dekaisugi', maxCol, maxRow, tierDefault)
+    await bikinStudio('IniGold', maxCol, maxRow, await TierStudio.findByOrFail('nama', 'gold'))
 
     // ----- generate film random -----
     const films = [

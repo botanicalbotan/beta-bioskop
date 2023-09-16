@@ -25,12 +25,12 @@ export default class Kupon extends BaseModel {
   @column()
   public nominal: number
 
+  @column.date()
+  public expiredAt: DateTime
+
   // data ini bikin ragu dah, bisa diilangin
   @column()
   public isValid: boolean
-
-  @column.date()
-  public expiredAt: DateTime
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

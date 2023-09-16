@@ -149,7 +149,7 @@ export default class UJadwalsController {
                     'films.nama as namaFilm',
                     'rating_sensors.nama_singkat as rating',
                     'genres.genre as genre',
-                    'films.durasi as durasi'
+                    'films.durasi as durasi',
                 )
                 .groupBy('films.id')
                 .orderBy('films.nama', 'asc')
@@ -164,6 +164,8 @@ export default class UJadwalsController {
             for (const iterator of jadwals) {
                 iterator.maxKapasitas = totalKursiValid
                 iterator.isPenuh = totalKursiValid <= iterator.jumlahDipesan
+                let filmSel = DateTime.fromJSDate(iterator.selesaiTayang)
+                iterator.isKelar = filmSel < DateTime.now()
             }
 
             let filmMaJadwals = templateListJadwal(jadwals, filmsAktif)

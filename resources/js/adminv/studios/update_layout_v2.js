@@ -167,12 +167,12 @@ for (let i = 0; i < semuaNode.length; i++) {
 }
 
 
-const swalError = function (error, judul = 'Terdapat error dari server!') {
+const swalError = function (error, suberror = 'Ini error dari server bro.') {
     return Swal.fire({
         icon: 'error',
-        title: judul,
+        title: error,
         scrollbarPadding: false,
-        text: error,
+        text: suberror,
         confirmButtonText: 'Tutup'
     })
 }

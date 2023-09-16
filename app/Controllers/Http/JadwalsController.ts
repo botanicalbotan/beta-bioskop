@@ -164,6 +164,7 @@ export default class JadwalsController {
                     )
                 .whereRaw('jadwals.film_mulai <= ?', [targetTayang.toSQL() as string])
                 .andWhereRaw('jadwals.post_interlude > ?', [targetTayang.toSQL() as string])
+                .andWhere('jadwals.studio_id', validrequest.studioId)
                 .orderBy('jadwals.film_mulai', 'desc')
                 .limit(1)
             // 1. film_mulai <= target_tayang < post_interlude
@@ -190,6 +191,7 @@ export default class JadwalsController {
                     )
                 .whereRaw('jadwals.film_mulai < ?', [targetPostInter.toSQL() as string])
                 .andWhereRaw('jadwals.film_mulai >= ?', [targetTayang.toSQL() as string])
+                .andWhere('jadwals.studio_id', validrequest.studioId)
                 .orderBy('jadwals.film_mulai', 'desc')
                 .limit(1)
             // 2. target_tayang <= film_mulai < target_post

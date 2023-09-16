@@ -16,13 +16,30 @@ export default class Reservasi extends BaseModel {
   public hargaTiketAkhir: number
 
   @column()
+  public ongkosLayanan: number
+  
+  // data mirip2 kuncikur
+  @column.dateTime()
+  public lockUntil: DateTime
+
+  @column()
+  public isActive: boolean
+
+  @column()
+  public isPaid: boolean
+
+  @column()
   public metodeBayar: string
 
   @column()
-  public validasiBayar: string
-
+  public noTransaksi: string
+  
   @column()
-  public token: string
+  public noVa: string
+
+  // buat nyocokin pas dateng ke tempat
+  @column()
+  public redeemToken: string | null
 
   @column()
   public isUsed: boolean

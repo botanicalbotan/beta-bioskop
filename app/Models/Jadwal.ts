@@ -3,7 +3,7 @@ import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:
 import Film from './Film'
 import Studio from './Studio'
 import Reservasi from './Reservasi'
-import Invoice from './Invoice'
+import Kuncikur from './Kuncikur'
 
 export default class Jadwal extends BaseModel {
   @column({ isPrimary: true })
@@ -37,8 +37,8 @@ export default class Jadwal extends BaseModel {
   @belongsTo(() => Studio)
   public studio: BelongsTo<typeof Studio>
 
-  @hasMany(() => Invoice)
-  public invoices: HasMany<typeof Invoice>
+  @hasMany(() => Kuncikur)
+  public kuncikurs: HasMany<typeof Kuncikur>
 
   @hasMany(() => Reservasi)
   public reservasis: HasMany<typeof Reservasi>
